@@ -1,0 +1,10 @@
+{
+  "description": "Delivers a visually engaging loading experience with smooth transitions to enhance user engagement and improve perceived performance during page loads.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
