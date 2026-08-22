@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import DriftWall from "./DriftWall";
+import PhotoShelf, { type ShelfItem } from "./PhotoShelf";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -120,6 +121,16 @@ const driftWallImages = [
   title: label,
 }));
 
+const galleryItems: ShelfItem[] = [
+  { num: "01", title: "Couples", meta: "2025", image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=900&q=85&fit=crop&auto=format" },
+  { num: "02", title: "Weddings", meta: "2025", image: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=900&q=85&fit=crop&auto=format" },
+  { num: "03", title: "Engagements", meta: "2025", image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=900&q=85&fit=crop&auto=format" },
+  { num: "04", title: "Maternity", meta: "2024", image: "https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=900&q=85&fit=crop&auto=format" },
+  { num: "05", title: "Portrait", meta: "2025", image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=900&q=85&fit=crop&auto=format" },
+  { num: "06", title: "Weddings", meta: "2024", image: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=900&q=85&fit=crop&auto=format" },
+  { num: "07", title: "Couples", meta: "2024", image: "https://images.unsplash.com/photo-1529636798458-92182e662485?w=900&q=85&fit=crop&auto=format" },
+];
+
 const testimonials = [
   {
     stars: "★★★★★",
@@ -149,7 +160,8 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
   const [stat2, setStat2] = useState(0);
 
   /* Frame Sequence State & Refs */
-  const [currentFrameIndex, setCurrentFrameIndex] = useState(0);
+  const frameBadgeRef = useRef<HTMLDivElement | null>(null);
+  const lastFrameRef = useRef<number>(0);
   const [framesLoaded, setFramesLoaded] = useState(false);
   const frameImagesRef = useRef<HTMLImageElement[]>([]);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -163,15 +175,23 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
   useEffect(() => {
     const imgs: HTMLImageElement[] = [];
     let count = 0;
+    const checkComplete = () => {
+      count++;
+      if (count === TOTAL_FRAMES) {
+        setFramesLoaded(true);
+      }
+    };
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
       const img = new Image();
       img.src = `/amp-rahul-pics/frame-${i}.png`;
-      img.onload = () => {
-        count++;
-        if (count === TOTAL_FRAMES) {
-          setFramesLoaded(true);
+      if (img.complete) {
+        checkComplete();
+      } else {
+        img.onload = checkComplete;
+        if (img.decode) {
+          img.decode().then(checkComplete).catch(() => {});
         }
-      };
+      }
       imgs.push(img);
     }
     frameImagesRef.current = imgs;
@@ -187,27 +207,19 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) return;
-
-    const targetW = Math.floor(rect.width * dpr);
-    const targetH = Math.floor(rect.height * dpr);
-
-    if (canvas.width !== targetW || canvas.height !== targetH) {
-      canvas.width = targetW;
-      canvas.height = targetH;
-    }
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const rectW = canvas.width / dpr;
+    const rectH = canvas.height / dpr;
 
     ctx.save();
     ctx.scale(dpr, dpr);
-    ctx.clearRect(0, 0, rect.width, rect.height);
+    ctx.clearRect(0, 0, rectW, rectH);
 
-    const hRatio = rect.width / img.width;
-    const vRatio = rect.height / img.height;
+    const hRatio = rectW / img.width;
+    const vRatio = rectH / img.height;
     const ratio = Math.min(hRatio, vRatio);
-    const centerShiftX = (rect.width - img.width * ratio) / 2;
-    const centerShiftY = (rect.height - img.height * ratio) / 2;
+    const centerShiftX = (rectW - img.width * ratio) / 2;
+    const centerShiftY = (rectH - img.height * ratio) / 2;
 
     ctx.drawImage(
       img,
@@ -223,21 +235,36 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
     ctx.restore();
   };
 
-  /* Draw frame-1 as soon as frames or canvas are ready */
+  const resizeCanvas = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const targetW = Math.floor(rect.width * dpr);
+    const targetH = Math.floor(rect.height * dpr);
+
+    if (canvas.width !== targetW || canvas.height !== targetH) {
+      canvas.width = targetW;
+      canvas.height = targetH;
+    }
+    drawCanvasFrame(lastFrameRef.current);
+  };
+
+  /* Draw frame-1 as soon as frames load */
   useEffect(() => {
     if (framesLoaded) {
-      drawCanvasFrame(currentFrameIndex);
+      resizeCanvas();
+      drawCanvasFrame(0);
     }
-  }, [framesLoaded, currentFrameIndex]);
+  }, [framesLoaded]);
 
-  /* Resize listener for canvas */
+  /* Resize listener */
   useEffect(() => {
-    const handleResize = () => {
-      drawCanvasFrame(currentFrameIndex);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [currentFrameIndex]);
+    window.addEventListener("resize", resizeCanvas);
+    return () => window.removeEventListener("resize", resizeCanvas);
+  }, []);
 
   /* Lenis smooth scrolling setup */
   useEffect(() => {
@@ -326,7 +353,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
             trigger: "#about",
             start: "top 85%",
             end: "top top",
-            scrub: 0.6,
+            scrub: 0.3,
           },
           opacity: 1,
           scale: 1,
@@ -341,18 +368,23 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         pin: true,
         start: "top top",
         end: "+=2600",
-        scrub: 0.8,
+        scrub: 0.1,
         onUpdate: (self) => {
           const frameIdx = Math.min(
             TOTAL_FRAMES - 1,
             Math.max(0, Math.floor(self.progress * TOTAL_FRAMES))
           );
-          setCurrentFrameIndex(frameIdx);
-          drawCanvasFrame(frameIdx);
+          if (lastFrameRef.current !== frameIdx) {
+            lastFrameRef.current = frameIdx;
+            drawCanvasFrame(frameIdx);
+            if (frameBadgeRef.current) {
+              frameBadgeRef.current.innerText = "FRAME " + String(frameIdx + 1).padStart(2, "0") + " / 22";
+            }
+          }
         },
       });
 
-      // Word-by-word text color reveal (grey -> white & gold) scrubbed across pinned section
+      // Word-by-word text color reveal & glowing highlight scrubbed across pinned section
       const aboutWords = gsap.utils.toArray<HTMLElement>(".about-word");
       gsap.fromTo(
         aboutWords,
@@ -695,28 +727,31 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       )}
 
       {/* Hero */}
-      <section className="min-h-screen grid md:grid-cols-2 relative overflow-hidden">
+      <section className="min-h-screen grid md:grid-cols-2 relative">
         {/* Left */}
         <div className="flex flex-col justify-end pb-20 pt-36 px-6 lg:px-14 relative z-10">
           <div
             className="gsap-hero-tag flex items-center gap-4 mb-12"
             style={{ ...mono, fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase", color: MUTED }}
           >
-            <span className="w-10 h-px" style={{ background: "#2a2a2a" }} />
-            {"{ 00 }"} : Wedding & Event Photography in Bijapur
           </div>
 
-          <h1 style={{ ...serif, fontWeight: 300, fontSize: "clamp(3.5rem, 7vw, 7.5rem)", lineHeight: 0.9, letterSpacing: "-0.02em", color: WHITE }}>
+          <h1 style={{ ...serif, fontWeight: 300, color: WHITE }}>
             {[
-              { text: "THE", delay: "0s", color: WHITE },
-              { text: "ESSENCE", delay: "0.1s", color: GOLD },
-              { text: "of", delay: "0.2s", color: WHITE, style: script },
-              { text: "PHOTOGRAPHY", delay: "0.3s", color: WHITE },
-            ].map(({ text, color, style: st }) => (
-              <span key={text} className="block overflow-hidden">
+              { text: "AMMA", color: WHITE, size: "clamp(4rem, 7vw, 7rem)" },
+              { text: "Mahadevi", color: GOLD, size: "clamp(4.2rem, 12.5vw, 12.5rem)", font: script },
+              { text: "PHOTOGRAPHY", color: WHITE, size: "clamp(3.2rem, 6.2vw, 6.3rem)", tracking: "0.02em" },
+            ].map(({ text, color, size, tracking, font }: { text: string; color: string; size: string; tracking?: string; font?: any }) => (
+              <span key={text} className="block overflow-visible whitespace-nowrap py-1">
                 <span
-                  className="gsap-hero-title-line block"
-                  style={{ color, ...(st ?? {}) }}
+                  className="gsap-hero-title-line block leading-none"
+                  style={{
+                    color,
+                    fontSize: size,
+                    letterSpacing: tracking || "-0.02em",
+                    fontStyle: "italic",
+                    ...(font ?? {}),
+                  }}
                 >
                   {text}
                 </span>
@@ -803,27 +838,11 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         className="w-full h-screen min-h-screen relative overflow-hidden flex flex-col justify-between px-6 lg:px-14 py-8"
         style={{ borderTop: `1px solid ${BORDER}`, background: BG_DARK }}
       >
-        <div style={{ maxWidth: 1280, width: "100%", margin: "0 auto" }} className="h-full flex flex-col justify-between">
-          {/* Header Tag + Frame counter */}
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex items-center gap-5 flex-1">
-              <span className="text-xs tracking-[0.2em]" style={{ ...mono, color: MUTED }}>
-                {"{ 01 }"}
-              </span>
-              <div className="flex-1 h-px gsap-section-line" style={{ background: BORDER }} />
-              <span className="text-xs tracking-[0.2em] uppercase" style={{ ...mono, color: MUTED }}>
-                About
-              </span>
-            </div>
-            <div className="ml-6 px-3.5 py-1 rounded-full border border-[#2a2a2a] bg-[#141414] text-xs font-mono tracking-widest text-[#ffc800]">
-              FRAME {String(currentFrameIndex + 1).padStart(2, "0")} / 22
-            </div>
-          </div>
-
+        <div style={{ maxWidth: 1440, width: "100%", margin: "0 auto" }} className="h-full flex flex-col justify-between">          
           {/* Main Grid: Pinned Frame Showcase on Left, Text + Stats on Right */}
           <div className="grid md:grid-cols-12 gap-8 items-center flex-1 my-auto">
             {/* Pinned Frame Showcase */}
-            <div className="gsap-about-frame-container md:col-span-6 lg:col-span-5 h-[52vh] md:h-[68vh] relative rounded-2xl overflow-hidden border border-[#262626] bg-[#0b0b0b] shadow-2xl flex items-center justify-center p-2">
+            <div className="gsap-about-frame-container md:col-span-6 lg:col-span-6 h-[65vh] md:h-[80vh] lg:h-[84vh] relative rounded-2xl overflow-hidden border border-[#262626] bg-[#0b0b0b] shadow-2xl flex items-center justify-center p-2">
               {/* High-DPI Canvas */}
               <canvas
                 ref={canvasRef}
@@ -831,27 +850,27 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
               />
               {/* Fallback image while canvas initializes */}
               <img
-                src={`/amp-rahul-pics/frame-${currentFrameIndex + 1}.png`}
-                alt={`AMP Studio frame ${currentFrameIndex + 1}`}
+                src="/amp-rahul-pics/frame-1.png"
+                alt="AMP Studio frame sequence"
                 className="absolute inset-0 w-full h-full object-contain p-2 transition-opacity duration-150"
                 style={{ opacity: framesLoaded ? 0 : 1 }}
               />
               {/* Decorative Glass Overlay & Frame Badge */}
-              <div className="absolute inset-0 pointer-events-none rounded-2xl ring-1 ring-white/10" />
+              {/* <div className="absolute inset-0 pointer-events-none rounded-2xl ring-1 ring-white/10" />
               <div className="absolute bottom-3 left-4 right-4 flex justify-between items-center z-20 text-[0.6rem] font-mono uppercase text-white/40 tracking-widest bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10">
                 <span>AMP Studio Story</span>
                 <span className="text-[#ffc800]">Rahul · 2025</span>
-              </div>
+              </div> */}
             </div>
 
             {/* About Text + Stat Counters */}
-            <div className="md:col-span-6 lg:col-span-7 flex flex-col justify-center pl-0 md:pl-6">
+            <div className="md:col-span-6 lg:col-span-6 flex flex-col justify-center pl-0 md:pl-8">
               <p
                 className="gsap-about-text flex flex-wrap items-baseline"
                 style={{
                   ...serif,
                   fontWeight: 300,
-                  fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
+                  fontSize: "clamp(1.75rem, 3.2vw, 2.85rem)",
                   letterSpacing: "-0.02em",
                   lineHeight: 1.35,
                   marginBottom: "2.5rem",
@@ -905,7 +924,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
                   <div style={{ ...mono, fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>Sessions completed</div>
                 </div>
                 <div className="gsap-stat-item">
-                  <div style={{ ...serif, fontSize: "2.5rem", fontWeight: 300, lineHeight: 1, color: WHITE }}>5-star</div>
+                  <div style={{ ...mono, fontSize: "1.75rem", fontWeight: 400, lineHeight: 1, color: GOLD, letterSpacing: "0.15em" }}>★★★★★</div>
                   <div style={{ ...mono, fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>Client rating</div>
                 </div>
                 <div className="gsap-stat-item">
@@ -914,12 +933,6 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Bottom indicator hint */}
-          <div className="flex justify-between items-center text-[0.65rem] font-mono text-white/30 tracking-widest uppercase pt-2">
-            <span>AMP Studio · Bijapur</span>
-            <span className="animate-pulse">Scroll to advance →</span>
           </div>
         </div>
       </section>
@@ -938,53 +951,9 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
             </p>
           </div>
 
-          {/* Asymmetric masonry grid */}
-          <div
-            className="gsap-gallery-grid"
-            style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gridAutoRows: "5rem", gap: "3px" }}
-          >
-            {[
-              { src: "photo-1519225421980-715cb0215aed", col: "span 5", row: "span 5", label: "Couples · 2025", alt: "Couple photography session in Bijapur" },
-              { src: "photo-1520854221256-17451cc331bf", col: "span 4", row: "span 3", label: "Weddings · 2025", alt: "Wedding photography in Bijapur, Karnataka" },
-              { src: "photo-1583939003579-730e3918a45a", col: "span 3", row: "span 3", label: "Engagements · 2025", alt: "Engagement shoot in Bijapur" },
-              { src: "photo-1476703993599-0035a21b17a9", col: "span 4", row: "span 4", label: "Maternity · 2024", alt: "Maternity photography in Bijapur" },
-              { src: "photo-1531746020798-e6953c6e8e04", col: "span 3", row: "span 2", label: "Portrait · 2025", alt: "Portrait photography session in Bijapur" },
-              { src: "photo-1606800052052-a08af7148866", col: "span 5", row: "span 4", label: "Weddings · 2024", alt: "Wedding photography in Vijayapura district" },
-              { src: "photo-1529636798458-92182e662485", col: "span 4", row: "span 3", label: "Couples · 2024", alt: "Candid couple photography in Bijapur" },
-            ].map(({ src, col, row, label, alt }) => (
-              <div
-                key={src}
-                className="gsap-gallery-item overflow-hidden relative group"
-                style={{ gridColumn: col, gridRow: row }}
-              >
-                <img
-                  src={`https://images.unsplash.com/${src}?w=900&q=85&fit=crop&auto=format`}
-                  alt={alt}
-                  className="gsap-gallery-img w-full h-full object-cover"
-                  style={{ filter: "brightness(0.78) contrast(1.05) saturate(0.85)", transition: "transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s" }}
-                  onMouseEnter={(e) => { const img = e.target as HTMLElement; img.style.transform = "scale(1.06)"; img.style.filter = "brightness(0.92) contrast(1.05) saturate(1)"; }}
-                  onMouseLeave={(e) => { const img = e.target as HTMLElement; img.style.transform = "scale(1)"; img.style.filter = "brightness(0.78) contrast(1.05) saturate(0.85)"; }}
-                />
-                <div
-                  className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300"
-                  style={{ padding: "0.6rem 0.8rem", background: "linear-gradient(to top, rgba(0,0,0,0.7), transparent)", ...mono, fontSize: "0.65rem", color: "rgba(245,240,232,0.7)", letterSpacing: "0.12em", textTransform: "uppercase" }}
-                >
-                  {label}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-right mt-3">
-            <a
-              href="#contact"
-              onClick={(e) => handleAnchorClick(e, "#contact")}
-              style={{ ...mono, fontSize: "0.7rem", color: MUTED, letterSpacing: "0.18em", textTransform: "uppercase", textDecoration: "none", borderBottom: `1px solid #2a2a2a`, paddingBottom: "2px", transition: "color 0.2s, border-color 0.2s" }}
-              onMouseEnter={(e) => { (e.target as HTMLElement).style.color = WHITE; (e.target as HTMLElement).style.borderBottomColor = MUTED; }}
-              onMouseLeave={(e) => { (e.target as HTMLElement).style.color = MUTED; (e.target as HTMLElement).style.borderBottomColor = "#2a2a2a"; }}
-            >
-              See more work →
-            </a>
+          {/* Interactive photo shelf: browse each session as a book, click to open */}
+          <div className="gsap-gallery-grid">
+            <PhotoShelf items={galleryItems} />
           </div>
         </div>
       </section>
@@ -992,7 +961,6 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       {/* Services */}
       <section id="services" style={{ background: BG_DARK, borderTop: `1px solid ${BORDER}`, padding: "6rem 1.5rem" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <SectionTag num="03" label="Services" />
 
           <div className="gsap-services-header grid md:grid-cols-2 gap-10 items-end mb-16">
             <h2 style={{ ...serif, fontWeight: 300, fontSize: "clamp(2.5rem, 5vw, 5rem)", letterSpacing: "-0.025em", lineHeight: 0.95, color: WHITE }}>
@@ -1038,7 +1006,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div style={{ ...serif, fontSize: "1.2rem", color: MUTED, fontStyle: "italic", textAlign: "right", whiteSpace: "nowrap" }}>{svc.price}</div>
+                <div style={{ ...serif, fontSize: "1.2rem", color: MUTED,  textAlign: "right", whiteSpace: "nowrap" }}>{svc.price}</div>
               </div>
             ))}
           </div>
@@ -1048,7 +1016,6 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       {/* Testimonials */}
       <section id="reviews" style={{ borderTop: `1px solid ${BORDER}`, padding: "6rem 1.5rem" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <SectionTag num="04" label="Testimonials" />
 
           <blockquote
             className="gsap-quote-block relative mx-auto text-center mb-5"
@@ -1095,7 +1062,6 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       {/* FAQ */}
       <section id="faq" style={{ background: BG_DARK, borderTop: `1px solid ${BORDER}`, padding: "6rem 1.5rem" }}>
         <div style={{ maxWidth: 780, margin: "0 auto" }}>
-          <SectionTag num="05" label="FAQ" />
           <h2 className="gsap-faq-header mb-14" style={{ ...serif, fontWeight: 300, fontSize: "clamp(2.2rem, 4vw, 4rem)", letterSpacing: "-0.025em", lineHeight: 0.95 }}>
             Frequently
             <br />
@@ -1155,14 +1121,6 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
               onMouseLeave={(e) => ((e.target as HTMLElement).style.background = GOLD)}
             >
               Book a Session
-            </a>
-            <a
-              href="mailto:hello@ampstudio.com"
-              style={{ ...mono, fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.2em", color: MUTED, textDecoration: "none", borderBottom: `1px solid #2a2a2a`, paddingBottom: "2px", transition: "color 0.2s" }}
-              onMouseEnter={(e) => ((e.target as HTMLElement).style.color = WHITE)}
-              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = MUTED)}
-            >
-              Send an email →
             </a>
           </div>
         </div>
