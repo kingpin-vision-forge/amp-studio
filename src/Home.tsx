@@ -1,4 +1,5 @@
 "use client";
+import imgLogo from "./imports/logo.png";
 
 import { useState, useEffect, useRef } from "react";
 import Lenis from "lenis";
@@ -758,13 +759,18 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         <a
           href="#"
           onClick={(e) => handleAnchorClick(e, "#")}
-          style={{ ...serif, fontSize: "1.4rem", letterSpacing: "-0.02em", color: WHITE, textDecoration: "none" }}
+          className="flex items-center gap-2 group transition-transform duration-300 hover:scale-105"
         >
-          AMP Studio
+          <img
+            src={imgLogo.src}
+            alt="AMP Studio Logo"
+            className="h-8 md:h-10 w-auto object-contain filter drop-shadow-[0_4px_12px_rgba(255,200,0,0.2)]"
+          />
         </a>
 
         <nav className="hidden md:flex items-center gap-8">
           {[
+            ["About", "#about"],
             ["Work", "#work"],
             ["Services", "#services"],
             ["Reviews", "#reviews"],
@@ -815,7 +821,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
           >
             ✕
           </button>
-          {[["Work", "#work"], ["Services", "#services"], ["Reviews", "#reviews"], ["Contact", "#contact"]].map(([label, href]) => (
+          {[["About", "#about"], ["Work", "#work"], ["Services", "#services"], ["Reviews", "#reviews"], ["Contact", "#contact"]].map(([label, href]) => (
             <a
               key={label}
               href={href}
@@ -1223,18 +1229,18 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         className="flex flex-col md:flex-row justify-between items-center gap-4 px-6 lg:px-14 py-7"
         style={{ borderTop: `1px solid ${BORDER}` }}
       >
-        <a
-          href="#"
-          onClick={(e) => handleAnchorClick(e, "#")}
-          style={{ ...serif, fontSize: "1rem", fontStyle: "italic", color: MUTED, textDecoration: "none", letterSpacing: "-0.02em", transition: "color 0.2s" }}
-          onMouseEnter={(e) => ((e.target as HTMLElement).style.color = WHITE)}
-          onMouseLeave={(e) => ((e.target as HTMLElement).style.color = MUTED)}
-        >
-          AMP Studio
-        </a>
-        <div style={{ ...mono, fontSize: "0.65rem", color: MUTED, letterSpacing: "0.15em", textAlign: "center" }}>
-          © 2026 AMP Studio Photography · Bijapur, Karnataka · All rights reserved
+        {/* Left: 2026 AMP Studio */}
+        <div style={{ ...mono, fontSize: "0.68rem", color: MUTED, letterSpacing: "0.15em" }}>
+          © 2026 AMP Studio
         </div>
+
+        {/* Center: Made by KingpiN Vision Forge */}
+        <div style={{ ...mono, fontSize: "0.68rem", color: WHITE, letterSpacing: "0.15em", textAlign: "center" }} className="flex items-center gap-1.5">
+          <span style={{ color: MUTED }}>Made by</span>
+          <span style={{ color: GOLD, fontWeight: 500 }}>KingpiN Vision Forge</span>
+        </div>
+
+        {/* Right: Social Links */}
         <div className="flex gap-6">
           {["Instagram", "Pinterest", "Contact"].map((link) => (
             <a
