@@ -148,6 +148,121 @@ const testimonials = [
   },
 ];
 
+
+/* Dynamic Interactive Service Row with 3D Hover Image Expansion */
+function ServiceRow({ svc, i }: { svc: (typeof services)[0]; i: number }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [rotX, setRotX] = useState(0);
+  const [rotY, setRotY] = useState(0);
+  const rowRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!rowRef.current) return;
+    const rect = rowRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    setRotY(((x - centerX) / centerX) * 12);
+    setRotX(-((y - centerY) / centerY) * 10);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setRotX(0);
+    setRotY(0);
+  };
+
+  return (
+    <div
+      ref={rowRef}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="gsap-service-row group relative cursor-pointer py-7 px-4 md:px-6 rounded-2xl border-b border-[#1e1e1e] transition-all duration-300 hover:bg-[#141414]/90"
+      style={{
+        borderTop: i === 0 ? `1px solid ${BORDER}` : undefined,
+      }}
+    >
+      <div className="grid grid-cols-12 gap-4 items-center">
+        {/* Number Badge */}
+        <div className="col-span-1 md:col-span-1 flex items-center">
+          <span
+            style={{ ...mono }}
+            className={`text-xs md:text-sm tracking-widest transition-colors duration-300 ${
+              isHovered ? "text-[#ffc800] font-semibold" : "text-[#888882]"
+            }`}
+          >
+            {svc.num}
+          </span>
+        </div>
+
+        {/* Service Title & Description */}
+        <div className="col-span-11 md:col-span-5 pr-4">
+          <h3
+            style={{ ...serif }}
+            className={`text-2xl md:text-3xl font-light mb-1.5 transition-all duration-300 ${
+              isHovered ? "text-[#ffc800] translate-x-2" : "text-white"
+            }`}
+          >
+            {svc.name}
+          </h3>
+          <p className="text-xs md:text-sm text-[#888882] leading-relaxed max-w-lg font-sans">
+            {svc.desc}
+          </p>
+        </div>
+
+        {/* Large Dynamic 3D Image Showcase Card */}
+        <div className="hidden md:flex col-span-4 justify-center items-center relative z-20">
+          <div
+            className={`relative rounded-2xl overflow-hidden shadow-2xl transition-all duration-500 ease-out border ${
+              isHovered
+                ? "w-64 h-40 opacity-100 scale-105 border-[#ffc800]/50 shadow-[0_25px_60px_rgba(0,0,0,0.95)]"
+                : "w-28 h-16 opacity-0 scale-90 border-white/10 pointer-events-none"
+            }`}
+            style={{
+              perspective: "1000px",
+              transformStyle: "preserve-3d",
+              transform: isHovered
+                ? `rotateX(${rotX}deg) rotateY(${rotY}deg) rotate(2.5deg)`
+                : "rotateX(0deg) rotateY(0deg) rotate(0deg)",
+            }}
+          >
+            <img
+              src={`https://images.unsplash.com/${svc.img}?w=800&q=85&fit=crop&auto=format`}
+              alt={svc.alt}
+              className={`w-full h-full object-cover transition-transform duration-700 ${
+                isHovered ? "scale-110" : "scale-100"
+              }`}
+            />
+            {/* Dark Vignette Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
+
+            {/* Glass Badge */}
+            <div className="absolute bottom-3 left-3 right-3 flex justify-between items-center text-[0.65rem] font-mono text-white/90 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/15">
+              <span className="text-[#ffc800] font-semibold">{svc.num}</span>
+              <span className="truncate max-w-[140px]">{svc.name}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Price Tag */}
+        <div className="hidden md:flex col-span-2 justify-end items-center">
+          <span
+            style={{ ...serif }}
+            className={`text-lg md:text-xl font-light italic transition-colors duration-300 ${
+              isHovered ? "text-[#ffc800]" : "text-[#888882]"
+            }`}
+          >
+            {svc.price}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* Main component */
 export default function Home({ loaded = true }: { loaded?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
@@ -973,41 +1088,9 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
             </p>
           </div>
 
-          <div className="gsap-services-list flex flex-col">
+          <div className="gsap-services-list flex flex-col gap-2">
             {services.map((svc, i) => (
-              <div
-                key={svc.num}
-                className="gsap-service-row group"
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "2rem 1fr 5rem auto",
-                  gap: "1.5rem 2rem",
-                  alignItems: "center",
-                  padding: "1.5rem 0",
-                  borderBottom: `1px solid ${BORDER}`,
-                  borderTop: i === 0 ? `1px solid ${BORDER}` : undefined,
-                  transition: "padding 0.3s",
-                }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.paddingLeft = "1rem"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.paddingLeft = "0"; }}
-              >
-                <span style={{ ...mono, fontSize: "0.7rem", color: MUTED, letterSpacing: "0.1em" }}>{svc.num}</span>
-                <div>
-                  <div style={{ ...serif, fontSize: "1.75rem", fontWeight: 300, color: WHITE, marginBottom: "0.25rem", transition: "color 0.2s" }} className="group-hover:opacity-60 transition-opacity">{svc.name}</div>
-                  <div style={{ fontSize: "0.78rem", color: MUTED, lineHeight: 1.7, maxWidth: 500 }}>{svc.desc}</div>
-                </div>
-                <div
-                  className="overflow-hidden opacity-0 group-hover:opacity-100 transition-all duration-300 scale-95 group-hover:scale-100 hidden md:block"
-                  style={{ width: "5rem", height: "4rem" }}
-                >
-                  <img
-                    src={`https://images.unsplash.com/${svc.img}?w=300&q=80&fit=crop&auto=format`}
-                    alt={svc.alt}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div style={{ ...serif, fontSize: "1.2rem", color: MUTED,  textAlign: "right", whiteSpace: "nowrap" }}>{svc.price}</div>
-              </div>
+              <ServiceRow key={svc.num} svc={svc} i={i} />
             ))}
           </div>
         </div>
