@@ -269,10 +269,10 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
   /* Lenis smooth scrolling setup */
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.4,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      touchMultiplier: 1.5,
+      touchMultiplier: 1.8,
     });
     lenisRef.current = lenis;
 
@@ -347,18 +347,18 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       // Fade in frame-1 container on scroll into section
       gsap.fromTo(
         ".gsap-about-frame-container",
-        { opacity: 0, scale: 0.94, y: 40 },
+        { opacity: 0, scale: 0.96, y: 25 },
         {
           scrollTrigger: {
             trigger: "#about",
-            start: "top 85%",
-            end: "top top",
-            scrub: 0.3,
+            start: "top 95%",
+            end: "top 10%",
+            scrub: 0.2,
           },
           opacity: 1,
           scale: 1,
           y: 0,
-          ease: "power2.out",
+          ease: "none",
         }
       );
 
@@ -367,12 +367,14 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         trigger: "#about",
         pin: true,
         start: "top top",
-        end: "+=2600",
+        end: "+=2400",
         scrub: 0.1,
+        anticipatePin: 1,
         onUpdate: (self) => {
+          const rawFrame = self.progress * (TOTAL_FRAMES - 1);
           const frameIdx = Math.min(
             TOTAL_FRAMES - 1,
-            Math.max(0, Math.floor(self.progress * TOTAL_FRAMES))
+            Math.max(0, Math.round(rawFrame))
           );
           if (lastFrameRef.current !== frameIdx) {
             lastFrameRef.current = frameIdx;
@@ -940,14 +942,13 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       {/* Gallery */}
       <section id="work" style={{ padding: "4rem 1.5rem 6rem" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div className="gsap-work-header flex justify-between items-end mb-10">
-            <h2 style={{ ...serif, fontWeight: 300, fontSize: "clamp(2.5rem, 5vw, 5rem)", letterSpacing: "-0.025em", lineHeight: 0.95, color: WHITE }}>
-              Recent
-              <br />
-              <em style={{ ...script, color: MUTED }}>Work</em>
+          <div className="gsap-work-header flex flex-col gap-3 mb-12">
+            <h2 style={{ ...serif, fontWeight: 300, fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", letterSpacing: "-0.025em", lineHeight: 1.1, color: WHITE }} className="whitespace-nowrap flex items-baseline gap-3">
+              <span>Recent</span>
+              <em style={{ ...script, color: GOLD }}>Work</em>
             </h2>
-            <p className="hidden md:block text-sm leading-relaxed text-right max-w-[200px]" style={{ color: MUTED }}>
-              Photos from weddings, engagements, and family sessions in Bijapur and North Karnataka.
+            <p className="text-sm md:text-base leading-relaxed max-w-xl" style={{ color: MUTED }}>
+              Photos from weddings, engagements, maternity, and family sessions across Bijapur and North Karnataka.
             </p>
           </div>
 
@@ -962,14 +963,13 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       <section id="services" style={{ background: BG_DARK, borderTop: `1px solid ${BORDER}`, padding: "6rem 1.5rem" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
 
-          <div className="gsap-services-header grid md:grid-cols-2 gap-10 items-end mb-16">
-            <h2 style={{ ...serif, fontWeight: 300, fontSize: "clamp(2.5rem, 5vw, 5rem)", letterSpacing: "-0.025em", lineHeight: 0.95, color: WHITE }}>
-              What
-              <br />
-              <em style={{ ...script, color: MUTED }}>We Offer</em>
+          <div className="gsap-services-header flex flex-col gap-3 mb-14">
+            <h2 style={{ ...serif, fontWeight: 300, fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", letterSpacing: "-0.025em", lineHeight: 1.1, color: WHITE }} className="whitespace-nowrap flex items-baseline gap-3">
+              <span>What</span>
+              <em style={{ ...script, color: GOLD }}>We Offer</em>
             </h2>
-            <p className="text-sm leading-relaxed" style={{ color: MUTED }}>
-              Wedding, event, and portrait photography in Bijapur, covering full-day weddings, engagement shoots, and family sessions.
+            <p className="text-sm md:text-base leading-relaxed max-w-xl" style={{ color: MUTED }}>
+              Wedding, event, maternity, and portrait photography in Bijapur, covering full-day weddings, engagement shoots, and family sessions.
             </p>
           </div>
 
@@ -1016,6 +1016,15 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       {/* Testimonials */}
       <section id="reviews" style={{ borderTop: `1px solid ${BORDER}`, padding: "6rem 1.5rem" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <div className="flex flex-col gap-3 mb-12">
+            <h2 style={{ ...serif, fontWeight: 300, fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", letterSpacing: "-0.025em", lineHeight: 1.1, color: WHITE }} className="whitespace-nowrap flex items-baseline gap-3">
+              <span>Client</span>
+              <em style={{ ...script, color: GOLD }}>Stories</em>
+            </h2>
+            <p className="text-sm md:text-base leading-relaxed max-w-xl" style={{ color: MUTED }}>
+              Read what couples and families across Bijapur say about their candid photo sessions.
+            </p>
+          </div>
 
           <blockquote
             className="gsap-quote-block relative mx-auto text-center mb-5"
@@ -1062,11 +1071,15 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       {/* FAQ */}
       <section id="faq" style={{ background: BG_DARK, borderTop: `1px solid ${BORDER}`, padding: "6rem 1.5rem" }}>
         <div style={{ maxWidth: 780, margin: "0 auto" }}>
-          <h2 className="gsap-faq-header mb-14" style={{ ...serif, fontWeight: 300, fontSize: "clamp(2.2rem, 4vw, 4rem)", letterSpacing: "-0.025em", lineHeight: 0.95 }}>
-            Frequently
-            <br />
-            <em style={{ ...script, color: MUTED }}>Asked</em>
-          </h2>
+          <div className="gsap-faq-header flex flex-col gap-3 mb-12">
+            <h2 style={{ ...serif, fontWeight: 300, fontSize: "clamp(2.2rem, 4.5vw, 4.2rem)", letterSpacing: "-0.025em", lineHeight: 1.1, color: WHITE }} className="whitespace-nowrap flex items-baseline gap-3">
+              <span>Frequently Asked</span>
+              <em style={{ ...script, color: GOLD }}>Questions</em>
+            </h2>
+            <p className="text-sm md:text-base leading-relaxed max-w-xl" style={{ color: MUTED }}>
+              Everything you need to know about booking, session locations, timelines, and photo delivery in Bijapur.
+            </p>
+          </div>
 
           <div className="gsap-faq-list flex flex-col">
             {faqItems.map((item, i) => (
