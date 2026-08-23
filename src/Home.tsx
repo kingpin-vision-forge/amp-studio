@@ -16,7 +16,7 @@ const WHITE = "#f5f0e8";
 const MUTED = "#888882";
 const BORDER = "#1e1e1e";
 const CARD = "#141414";
-const TOTAL_FRAMES = 22;
+const TOTAL_FRAMES = 108;
 
 const serif = { fontFamily: "Italiana, serif" } as const;
 const script = { fontFamily: "Italianno, serif" } as const;
@@ -298,7 +298,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
     };
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
       const img = new Image();
-      img.src = `/amp-rahul-pics/frame-${i}.png`;
+      img.src = `/amp-rahul-pics/frame-${String(i).padStart(3, "0")}.jpg`;
       if (img.complete) {
         checkComplete();
       } else {
@@ -482,7 +482,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         trigger: "#about",
         pin: true,
         start: "top top",
-        end: "+=2400",
+        end: "+=3600",
         scrub: 0.1,
         anticipatePin: 1,
         onUpdate: (self) => {
@@ -495,7 +495,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
             lastFrameRef.current = frameIdx;
             drawCanvasFrame(frameIdx);
             if (frameBadgeRef.current) {
-              frameBadgeRef.current.innerText = "FRAME " + String(frameIdx + 1).padStart(2, "0") + " / 22";
+              frameBadgeRef.current.innerText = "FRAME " + String(frameIdx + 1).padStart(3, "0") + " / 108";
             }
           }
         },
@@ -967,7 +967,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
               />
               {/* Fallback image while canvas initializes */}
               <img
-                src="/amp-rahul-pics/frame-1.png"
+                src="/amp-rahul-pics/frame-001.jpg"
                 alt="AMP Studio frame sequence"
                 className="absolute inset-0 w-full h-full object-contain p-2 transition-opacity duration-150"
                 style={{ opacity: framesLoaded ? 0 : 1 }}
