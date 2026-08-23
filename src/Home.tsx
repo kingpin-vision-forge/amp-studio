@@ -340,7 +340,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
 
     const hRatio = rectW / img.width;
     const vRatio = rectH / img.height;
-    const ratio = Math.min(hRatio, vRatio);
+    const ratio = Math.max(hRatio, vRatio);
     const centerShiftX = (rectW - img.width * ratio) / 2;
     const centerShiftY = (rectH - img.height * ratio) / 2;
 
@@ -788,8 +788,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
             </a>
           ))}
           <a
-            href="#contact"
-            onClick={(e) => handleAnchorClick(e, "#contact")}
+            href="tel:+919686810436"
             style={{ ...mono, fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase", color: WHITE, textDecoration: "none", border: `1px solid #2a2a2a`, padding: "0.45rem 1.1rem", transition: "background 0.2s, color 0.2s" }}
             onMouseEnter={(e) => { (e.target as HTMLElement).style.background = WHITE; (e.target as HTMLElement).style.color = BG; }}
             onMouseLeave={(e) => { (e.target as HTMLElement).style.background = "transparent"; (e.target as HTMLElement).style.color = WHITE; }}
@@ -878,8 +877,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
 
           <div className="flex gap-5 mt-10 items-center">
             <a
-              href="#contact"
-              onClick={(e) => handleAnchorClick(e, "#contact")}
+              href="tel:+919686810436"
               className="gsap-hero-btn"
               style={{ background: GOLD, color: BG, fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.2em", padding: "0.8rem 1.6rem", textDecoration: "none", fontWeight: 500, transition: "background 0.2s" }}
               onMouseEnter={(e) => ((e.target as HTMLElement).style.background = "#e6b400")}
@@ -946,11 +944,11 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         className="w-full h-screen min-h-screen relative overflow-hidden flex flex-col justify-between px-6 lg:px-14 py-8"
         style={{ borderTop: `1px solid ${BORDER}`, background: BG_DARK }}
       >
-        <div style={{ maxWidth: 1440, width: "100%", margin: "0 auto" }} className="h-full flex flex-col justify-between">          
+        <div style={{ maxWidth: 1600, width: "100%", margin: "0 auto" }} className="h-full flex flex-col justify-between">          
           {/* Main Grid: Pinned Frame Showcase on Left, Text + Stats on Right */}
           <div className="grid md:grid-cols-12 gap-8 items-center flex-1 my-auto">
             {/* Pinned Frame Showcase */}
-            <div className="gsap-about-frame-container md:col-span-6 lg:col-span-6 h-[65vh] md:h-[80vh] lg:h-[84vh] relative rounded-2xl overflow-hidden border border-[#262626] bg-[#0b0b0b] shadow-2xl flex items-center justify-center p-2">
+            <div className="gsap-about-frame-container md:col-span-6 lg:col-span-6 h-[72vh] md:h-[86vh] lg:h-[90vh] relative rounded-xl overflow-hidden border border-white/10 bg-[#070707] shadow-2xl flex items-center justify-center p-0.5">
               {/* High-DPI Canvas */}
               <canvas
                 ref={canvasRef}
@@ -960,7 +958,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
               <img
                 src="/amp-rahul-pics/frame-001.jpg"
                 alt="AMP Studio frame sequence"
-                className="absolute inset-0 w-full h-full object-contain p-2 transition-opacity duration-150"
+                className="absolute inset-0 w-full h-full object-cover transition-opacity duration-150"
                 style={{ opacity: framesLoaded ? 0 : 1 }}
               />
               {/* Decorative Glass Overlay & Frame Badge */}
@@ -1025,6 +1023,25 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
                   </span>
                 ))}
               </p>
+
+              {/* Amma Mahadevi Founder Showcase Card */}
+              <div className="flex items-center gap-4 mb-6 p-3 rounded-2xl bg-[#121212] border border-[#222222] shadow-xl">
+                <div className="w-16 h-20 md:w-20 md:h-24 rounded-xl overflow-hidden flex-shrink-0 border border-white/15 shadow-md">
+                  <img
+                    src="/amma-mahadevi-about.jpg"
+                    alt="Amma Mahadevi - Founder & Lead Photographer at AMP Studio"
+                    className="w-full h-full object-cover object-top filter contrast-[1.03]"
+                  />
+                </div>
+                <div className="flex flex-col justify-center">
+                  <div style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase mt-0.5">
+                    Lead Photographer & Artist
+                  </div>
+                  <p style={{ ...sans }} className="text-xs text-[#888882] mt-1 max-w-sm leading-relaxed">
+                    Capturing timeless wedding, portrait, and event stories across Bijapur & North Karnataka.
+                  </p>
+                </div>
+              </div>
 
               <div className="gsap-about-stats grid grid-cols-3 gap-6 pt-6 border-t border-[#1e1e1e]">
                 <div className="gsap-stat-item">
@@ -1202,7 +1219,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
           </h2>
           <div className="flex gap-5 justify-center items-center">
             <a
-              href="mailto:hello@ampstudio.com"
+              href="tel:+919686810436"
               style={{ background: GOLD, color: BG, fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.2em", padding: "0.9rem 2rem", textDecoration: "none", fontWeight: 500, transition: "background 0.2s" }}
               onMouseEnter={(e) => ((e.target as HTMLElement).style.background = "#e6b400")}
               onMouseLeave={(e) => ((e.target as HTMLElement).style.background = GOLD)}
