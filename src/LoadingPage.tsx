@@ -48,11 +48,6 @@ export default function LoadingPage() {
 
         {/* Right: Typography Showcase with Clean Word Spacing */}
         <div className="flex flex-col justify-center text-center md:text-left">
-          {/* Tagline */}
-          <div style={{ ...mono }} className="text-xs text-[#ffc800] tracking-[0.25em] uppercase mb-2">
-            {"{ 00 }"} · WEDDING & EVENT PHOTOGRAPHY
-          </div>
-
           {/* Line 1: THE */}
           <div
             style={{ ...serif }}
@@ -63,7 +58,7 @@ export default function LoadingPage() {
 
           {/* Line 2: ESSENCE in Gold Script */}
           <div
-            style={{ ...script }}
+            style={{ ...serif }}
             className="text-6xl md:text-8xl text-[#ffc800] -mt-2 -mb-2 font-normal leading-none"
           >
             ESSENCE

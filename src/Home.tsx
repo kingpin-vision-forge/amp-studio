@@ -164,8 +164,8 @@ function ServiceRow({ svc, i }: { svc: (typeof services)[0]; i: number }) {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    setRotY(((x - centerX) / centerX) * 12);
-    setRotX(-((y - centerY) / centerY) * 10);
+    setRotY(((x - centerX) / centerX) * 14);
+    setRotX(-((y - centerY) / centerY) * 12);
   };
 
   const handleMouseLeave = () => {
@@ -180,52 +180,59 @@ function ServiceRow({ svc, i }: { svc: (typeof services)[0]; i: number }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="gsap-service-row group relative cursor-pointer py-7 px-4 md:px-6 rounded-2xl border-b border-[#1e1e1e] transition-all duration-300 hover:bg-[#141414]/90"
+      className="gsap-service-row group relative cursor-pointer py-6 px-4 md:px-6 rounded-2xl border-b border-[#1e1e1e] transition-all duration-300 hover:bg-[#141414]"
       style={{
         borderTop: i === 0 ? `1px solid ${BORDER}` : undefined,
       }}
     >
-      <div className="grid grid-cols-12 gap-4 items-center">
-        {/* Number Badge */}
-        <div className="col-span-1 md:col-span-1 flex items-center">
-          <span
-            style={{ ...mono }}
-            className={`text-xs md:text-sm tracking-widest transition-colors duration-300 ${
-              isHovered ? "text-[#ffc800] font-semibold" : "text-[#888882]"
-            }`}
-          >
-            {svc.num}
-          </span>
-        </div>
-
-        {/* Service Title & Description */}
-        <div className="col-span-11 md:col-span-5 pr-4">
-          <h3
-            style={{ ...serif }}
-            className={`text-2xl md:text-3xl font-light mb-1.5 transition-all duration-300 ${
-              isHovered ? "text-[#ffc800] translate-x-2" : "text-white"
-            }`}
-          >
-            {svc.name}
-          </h3>
-          <p className="text-xs md:text-sm text-[#888882] leading-relaxed max-w-lg font-sans">
+      <div className="flex flex-col md:grid md:grid-cols-12 gap-4 items-start md:items-center">
+        {/* Number + Title + Description */}
+        <div className="w-full md:col-span-6 flex flex-col gap-1">
+          <div className="flex items-center justify-between md:justify-start gap-3">
+            <div className="flex items-center gap-3">
+              <span
+                style={{ ...mono }}
+                className={`text-xs md:text-sm tracking-widest transition-colors duration-300 ${
+                  isHovered ? "text-[#ffc800] font-semibold" : "text-[#888882]"
+                }`}
+              >
+                {svc.num}
+              </span>
+              <h3
+                style={{ ...serif }}
+                className={`text-xl md:text-3xl font-light transition-all duration-300 ${
+                  isHovered ? "text-[#ffc800] translate-x-1" : "text-white"
+                }`}
+              >
+                {svc.name}
+              </h3>
+            </div>
+            {/* Mobile Price */}
+            <span
+              style={{ ...serif }}
+              className="md:hidden text-sm font-light italic text-[#ffc800]"
+            >
+              {svc.price}
+            </span>
+          </div>
+          <p className="text-xs md:text-sm text-[#888882] leading-relaxed max-w-lg font-sans pl-7 md:pl-8">
             {svc.desc}
           </p>
         </div>
 
-        {/* Large Dynamic 3D Image Showcase Card */}
-        <div className="hidden md:flex col-span-4 justify-center items-center relative z-20">
+        {/* Center / Right: Dynamic Image Preview */}
+        <div className="w-full md:col-span-4 flex justify-start md:justify-center items-center relative z-20 my-2 md:my-0 pl-7 md:pl-0">
           <div
-            className={`relative rounded-2xl overflow-hidden shadow-2xl transition-all duration-500 ease-out border ${
+            className={`relative rounded-xl md:rounded-2xl overflow-hidden shadow-xl transition-all duration-500 ease-out border ${
               isHovered
-                ? "w-64 h-40 opacity-100 scale-105 border-[#ffc800]/50 shadow-[0_25px_60px_rgba(0,0,0,0.95)]"
-                : "w-28 h-16 opacity-0 scale-90 border-white/10 pointer-events-none"
+                ? "w-full md:w-64 h-48 md:h-40 opacity-100 scale-100 border-[#ffc800]/60 shadow-[0_20px_50px_rgba(0,0,0,0.95)]"
+                : "w-36 md:w-36 h-24 md:h-20 opacity-80 border-white/10"
             }`}
             style={{
               perspective: "1000px",
               transformStyle: "preserve-3d",
               transform: isHovered
-                ? `rotateX(${rotX}deg) rotateY(${rotY}deg) rotate(2.5deg)`
+                ? `rotateX(${rotX}deg) rotateY(${rotY}deg) rotate(1.5deg)`
                 : "rotateX(0deg) rotateY(0deg) rotate(0deg)",
             }}
           >
@@ -237,18 +244,18 @@ function ServiceRow({ svc, i }: { svc: (typeof services)[0]; i: number }) {
               }`}
             />
             {/* Dark Vignette Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
 
-            {/* Glass Badge */}
-            <div className="absolute bottom-3 left-3 right-3 flex justify-between items-center text-[0.65rem] font-mono text-white/90 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/15">
+            {/* Badge Overlay */}
+            <div className="absolute bottom-2.5 left-2.5 right-2.5 flex justify-between items-center text-[0.65rem] font-mono text-white/90 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/15">
               <span className="text-[#ffc800] font-semibold">{svc.num}</span>
               <span className="truncate max-w-[140px]">{svc.name}</span>
             </div>
           </div>
         </div>
 
-        {/* Price Tag */}
-        <div className="hidden md:flex col-span-2 justify-end items-center">
+        {/* Desktop Price Tag */}
+        <div className="hidden md:flex md:col-span-2 justify-end items-center">
           <span
             style={{ ...serif }}
             className={`text-lg md:text-xl font-light italic transition-colors duration-300 ${
@@ -557,15 +564,9 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       });
 
       // 4. Work / Gallery Section
-      gsap.from(".gsap-work-header", {
-        scrollTrigger: {
-          trigger: "#work",
-          start: "top 80%",
-        },
-        y: 40,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
+      gsap.fromTo(".gsap-work-header", { y: 30, opacity: 0 }, {
+        scrollTrigger: { trigger: "#work", start: "top 95%" },
+        y: 0, opacity: 1, duration: 0.8, ease: "power3.out", clearProps: "transform,opacity"
       });
 
       gsap.from(".gsap-gallery-item", {
@@ -594,76 +595,60 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         });
       });
 
-      // 5. Services Section
-      gsap.from(".gsap-services-header", {
-        scrollTrigger: {
-          trigger: "#services",
-          start: "top 80%",
-        },
-        y: 40,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
-      });
+      // 5. Services Section (Guaranteed Visible)
+      gsap.fromTo(
+        ".gsap-services-header",
+        { y: 30, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: "#services",
+            start: "top 95%",
+          },
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: "power3.out",
+          clearProps: "transform,opacity",
+        }
+      );
 
-      gsap.from(".gsap-service-row", {
-        scrollTrigger: {
-          trigger: ".gsap-services-list",
-          start: "top 80%",
-        },
-        x: -40,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.12,
-        ease: "power3.out",
-      });
+      gsap.fromTo(
+        ".gsap-service-row",
+        { y: 30, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: "#services",
+            start: "top 95%",
+          },
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          stagger: 0.1,
+          ease: "power3.out",
+          clearProps: "transform,opacity",
+        }
+      );
 
       // 6. Testimonials Section
-      gsap.from(".gsap-quote-block", {
-        scrollTrigger: {
-          trigger: "#reviews",
-          start: "top 80%",
-        },
-        scale: 0.94,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
+      gsap.fromTo(".gsap-quote-block", { scale: 0.96, opacity: 0 }, {
+        scrollTrigger: { trigger: "#reviews", start: "top 95%" },
+        scale: 1, opacity: 1, duration: 0.8, ease: "power3.out", clearProps: "transform,opacity"
       });
 
-      gsap.from(".gsap-review-card", {
-        scrollTrigger: {
-          trigger: ".gsap-reviews-grid",
-          start: "top 80%",
-        },
-        y: 45,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: "power3.out",
+      gsap.fromTo(".gsap-review-card", { y: 30, opacity: 0 }, {
+        scrollTrigger: { trigger: "#reviews", start: "top 95%" },
+        y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: "power3.out", clearProps: "transform,opacity"
       });
 
       // 7. FAQ Section
-      gsap.from(".gsap-faq-header", {
-        scrollTrigger: {
-          trigger: "#faq",
-          start: "top 80%",
-        },
-        y: 35,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
+      gsap.fromTo(".gsap-faq-header", { y: 30, opacity: 0 }, {
+        scrollTrigger: { trigger: "#faq", start: "top 95%" },
+        y: 0, opacity: 1, duration: 0.8, ease: "power3.out", clearProps: "transform,opacity"
       });
 
-      gsap.from(".gsap-faq-item", {
-        scrollTrigger: {
-          trigger: ".gsap-faq-list",
-          start: "top 85%",
-        },
-        y: 30,
-        opacity: 0,
-        duration: 0.7,
-        stagger: 0.1,
-        ease: "power3.out",
+      gsap.fromTo(".gsap-faq-item", { y: 25, opacity: 0 }, {
+        scrollTrigger: { trigger: "#faq", start: "top 95%" },
+        y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: "power3.out", clearProps: "transform,opacity"
       });
 
       // 8. CTA Section
