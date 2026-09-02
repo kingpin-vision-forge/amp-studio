@@ -61,24 +61,62 @@ export default function PhotoShelf({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedIdx]);
 
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const scrollSlider = (direction: "left" | "right") => {
+    if (!sliderRef.current) return;
+    const scrollAmount = 320;
+    sliderRef.current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
+  // Duplicate items to ensure a seamless infinite sliding track
+  const carouselItems = [...items, ...items];
+
   return (
-    <div className="w-full relative py-8">
-      {/* 3D Shelf Container */}
-      <div className="w-full relative" style={{ perspective: "1200px" }}>
-        {/* Grid of 3D Photo Books */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 md:gap-10 pb-8">
-          {items.map((item, idx) => (
-            <Book3DCard
-              key={idx}
-              item={item}
-              onClick={() => handleOpenBook(idx)}
-            />
-          ))}
+    <div className="w-full relative py-6 select-none">
+      {/* Top Controls Bar: Badge + Navigation Arrows */}
+      {/* 3D Sliding Shelf Container */}
+      <div
+        className="w-full relative overflow-hidden pause-on-hover pt-10 pb-6"
+        style={{ perspective: "1200px" }}
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
+        {/* Horizontal Scroll / Sliding Track */}
+        <div
+          ref={sliderRef}
+          className="w-full overflow-x-auto hide-scrollbar scroll-smooth pt-8 pb-10"
+        >
+          <div
+            className="animate-slide-shelf gap-8 md:gap-10 px-6 py-2"
+            style={{
+              animationPlayState: isPaused ? "paused" : "running",
+            }}
+          >
+            {carouselItems.map((item, idx) => (
+              <div
+                key={`${item.num}-${idx}`}
+                className="w-[240px] sm:w-[270px] md:w-[290px] flex-shrink-0 pt-3 pb-2"
+              >
+                <Book3DCard
+                  item={item}
+                  onClick={() => handleOpenBook(idx % items.length)}
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
+        {/* Left & Right Vignette Fade Gradients */}
+        <div className="absolute top-0 bottom-6 left-0 w-16 md:w-28 bg-gradient-to-r from-[#0b0b0b] to-transparent pointer-events-none z-10" />
+
         {/* Glossy Studio Shelf Line */}
-        <div className="w-full h-4 relative mt-2 rounded-full overflow-hidden border-t border-white/10 bg-gradient-to-r from-transparent via-[#1c1c1c] to-transparent shadow-xl">
-          <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+        <div className="w-full h-3.5 relative mt-2 rounded-full overflow-hidden border-t border-white/15 bg-gradient-to-r from-transparent via-[#222222] to-transparent shadow-2xl">
+          <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
         </div>
       </div>
 
@@ -195,31 +233,8 @@ export default function PhotoShelf({
                   </div>
                 </div>
 
-                {/* Hinged Cover (Opens to the left) */}
-                <div
-                  className="absolute inset-y-0 left-0 w-1/2 z-30 transition-transform duration-700 ease-in-out pointer-events-none rounded-l-2xl overflow-hidden border-r border-white/20 shadow-2xl"
-                  style={{
-                    transformOrigin: "left center",
-                    transform: coverOpen ? "rotateY(-150deg)" : "rotateY(0deg)",
-                    transformStyle: "preserve-3d",
-                    backfaceVisibility: "hidden",
-                  }}
-                >
-                  <img src={selectedItem.image} alt="Cover" className="w-full h-full object-cover filter brightness-90" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-8 flex flex-col justify-between">
-                    <span style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase">
-                      {"{ "}{selectedItem.num}{" }"} · AMP Studio
-                    </span>
-                    <div>
-                      <h4 style={{ ...serif }} className="text-3xl text-white font-light">
-                        {selectedItem.title}
-                      </h4>
-                      <p style={{ ...mono }} className="text-xs text-white/60 tracking-widest uppercase mt-1">
-                        {selectedItem.meta}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                {/* Clean Book Spine Joint Accent */}
+                <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-[2px] bg-white/10 z-20 pointer-events-none" />
               </div>
             </div>
 
@@ -284,11 +299,11 @@ function Book3DCard({ item, onClick }: { item: ShelfItem; onClick: () => void })
         style={{
           transformStyle: "preserve-3d",
           transform: isHovered
-            ? `translateY(-16px) translateZ(30px) rotateX(${rotX}deg) rotateY(${rotY - 18}deg) scale(1.04)`
-            : "translateY(0px) translateZ(0px) rotateX(0deg) rotateY(-12deg) scale(1)",
+            ? `translateY(-10px) translateZ(20px) rotateX(${rotX * 0.7}deg) rotateY(${rotY * 0.7 - 6}deg) scale(1.02)`
+            : "translateY(0px) translateZ(0px) rotateX(0deg) rotateY(-5deg) scale(1)",
           boxShadow: isHovered
-            ? "-20px 30px 45px rgba(0, 0, 0, 0.85), 0 0 30px rgba(255, 200, 0, 0.15)"
-            : "-10px 15px 25px rgba(0, 0, 0, 0.6)",
+            ? "-14px 20px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 200, 0, 0.15)"
+            : "-6px 10px 18px rgba(0, 0, 0, 0.6)",
         }}
       >
         {/* Front Cover */}
@@ -343,32 +358,33 @@ function Book3DCard({ item, onClick }: { item: ShelfItem; onClick: () => void })
 
         {/* 3D Spine (Left Edge) */}
         <div
-          className="absolute inset-y-0 left-0 w-[24px] bg-[#1a1a1a] border-y border-l border-white/20 flex items-center justify-center rounded-l-md"
+          className="absolute inset-y-0 left-0 w-[18px] bg-[#1a1a1a] border-y border-l border-white/20 flex items-center justify-center rounded-l-sm overflow-hidden"
           style={{
-            transform: "rotateY(-90deg) translateZ(12px)",
+            transform: "rotateY(-90deg) translateZ(9px)",
             transformOrigin: "left center",
           }}
         >
-          <span style={{ ...mono }} className="text-[0.55rem] text-[#ffc800] tracking-widest uppercase rotate-90 whitespace-nowrap">
-            {item.title}
-          </span>
+          <div className="w-1 h-8 rounded-full bg-[#ffc800]/40" />
         </div>
 
         {/* 3D Page Stack (Right Edge) */}
         <div
-          className="absolute inset-y-1 right-0 w-[20px] bg-[#dfd9ce] border-y border-r border-[#b0a99c] rounded-r-sm"
+          className="absolute inset-y-1 right-0 w-[16px] bg-[#dfd9ce] border-y border-r border-[#b0a99c] rounded-r-sm"
           style={{
-            transform: "rotateY(90deg) translateZ(10px)",
+            transform: "rotateY(90deg) translateZ(8px)",
             transformOrigin: "right center",
             backgroundImage: "linear-gradient(to right, #ccc 1px, transparent 1px)",
             backgroundSize: "3px 100%",
           }}
         />
 
-        {/* Back Cover */}
+        {/* Solid Clean Back Cover */}
         <div
-          className="absolute inset-0 bg-[#0c0c0c] rounded-xl border border-white/10"
-          style={{ transform: "translateZ(-12px)" }}
+          className="absolute inset-0 bg-[#101010] rounded-xl border border-white/10"
+          style={{
+            transform: "translateZ(-10px)",
+            backfaceVisibility: "hidden",
+          }}
         />
       </div>
     </div>

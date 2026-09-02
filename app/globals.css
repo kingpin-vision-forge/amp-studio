@@ -95,3 +95,23 @@ html.lenis, html.lenis body {
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
 }
+
+/* Photo Shelf Infinite Sliding Track */
+@keyframes slideTrack {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-slide-shelf {
+  display: flex;
+  width: max-content;
+  animation: slideTrack 38s linear infinite;
+}
+
+.pause-on-hover:hover .animate-slide-shelf {
+  animation-play-state: paused;
+}

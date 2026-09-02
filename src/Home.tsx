@@ -2,6 +2,7 @@
 import imgLogo from "./imports/logo.png";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -473,72 +474,35 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         });
       });
 
-      // 3. About Section: Pinned Screen-Size Frame Sequence + Fade-in of frame-1 + Word Scrubbing
-      // Fade in frame-1 container on scroll into section
+      // 3. About Section: Elegant entrance for shop image and textual content
       gsap.fromTo(
         ".gsap-about-frame-container",
-        { opacity: 0, scale: 0.96, y: 25 },
+        { opacity: 0, scale: 0.96, y: 30 },
         {
           scrollTrigger: {
             trigger: "#about",
-            start: "top 95%",
-            end: "top 10%",
-            scrub: 0.2,
+            start: "top 85%",
           },
           opacity: 1,
           scale: 1,
           y: 0,
-          ease: "none",
+          duration: 0.9,
+          ease: "power3.out",
         }
       );
 
-      // Pin About section for frame-by-frame scrub (frame-1 -> frame-22)
-      ScrollTrigger.create({
-        trigger: "#about",
-        pin: true,
-        start: "top top",
-        end: "+=3600",
-        scrub: 0.1,
-        anticipatePin: 1,
-        onUpdate: (self) => {
-          const rawFrame = self.progress * (TOTAL_FRAMES - 1);
-          const frameIdx = Math.min(
-            TOTAL_FRAMES - 1,
-            Math.max(0, Math.round(rawFrame))
-          );
-          if (lastFrameRef.current !== frameIdx) {
-            lastFrameRef.current = frameIdx;
-            drawCanvasFrame(frameIdx);
-            if (frameBadgeRef.current) {
-              frameBadgeRef.current.innerText = "FRAME " + String(frameIdx + 1).padStart(3, "0") + " / 108";
-            }
-          }
-        },
-      });
-
-      // Word-by-word text color reveal & glowing highlight scrubbed across pinned section
-      const aboutWords = gsap.utils.toArray<HTMLElement>(".about-word");
       gsap.fromTo(
-        aboutWords,
-        {
-          color: (i, target) =>
-            target.classList.contains("about-gold")
-              ? "rgba(255, 200, 0, 0.2)"
-              : "rgba(245, 240, 232, 0.2)",
-        },
+        ".gsap-about-text",
+        { opacity: 0, y: 25 },
         {
           scrollTrigger: {
             trigger: "#about",
-            start: "top top",
-            end: "+=2000",
-            scrub: 0.8,
+            start: "top 80%",
           },
-          color: (i, target) =>
-            target.classList.contains("about-gold") ? GOLD : WHITE,
-          stagger: {
-            amount: 1.2,
-          },
-          ease: "none",
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
         }
       );
 
@@ -778,21 +742,34 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         <nav className="hidden md:flex items-center gap-8">
           {[
             ["About", "#about"],
+            ["Founders", "/founders"],
             ["Work", "#work"],
             ["Services", "#services"],
             ["Reviews", "#reviews"],
             ["Contact", "#contact"],
           ].map(([label, href]) => (
-            <a
-              key={label}
-              href={href}
-              onClick={(e) => handleAnchorClick(e, href)}
-              style={{ ...mono, fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase", color: MUTED, textDecoration: "none", transition: "color 0.2s" }}
-              onMouseEnter={(e) => ((e.target as HTMLElement).style.color = WHITE)}
-              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = MUTED)}
-            >
-              {label}
-            </a>
+            href.startsWith("/") ? (
+              <Link
+                key={label}
+                href={href}
+                style={{ ...mono, fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase", color: MUTED, textDecoration: "none", transition: "color 0.2s" }}
+                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = WHITE)}
+                onMouseLeave={(e) => ((e.target as HTMLElement).style.color = MUTED)}
+              >
+                {label}
+              </Link>
+            ) : (
+              <a
+                key={label}
+                href={href}
+                onClick={(e) => handleAnchorClick(e, href)}
+                style={{ ...mono, fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase", color: MUTED, textDecoration: "none", transition: "color 0.2s" }}
+                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = WHITE)}
+                onMouseLeave={(e) => ((e.target as HTMLElement).style.color = MUTED)}
+              >
+                {label}
+              </a>
+            )
           ))}
           <a
             href="tel:+919686810436"
@@ -827,15 +804,33 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
           >
             ✕
           </button>
-          {[["About", "#about"], ["Work", "#work"], ["Services", "#services"], ["Reviews", "#reviews"], ["Contact", "#contact"]].map(([label, href]) => (
-            <a
-              key={label}
-              href={href}
-              onClick={(e) => handleAnchorClick(e, href)}
-              style={{ ...serif, fontSize: "2.5rem", color: WHITE, textDecoration: "none" }}
-            >
-              {label}
-            </a>
+          {[
+            ["About", "#about"],
+            ["About Founders", "/founders"],
+            ["Work", "#work"],
+            ["Services", "#services"],
+            ["Reviews", "#reviews"],
+            ["Contact", "#contact"],
+          ].map(([label, href]) => (
+            href.startsWith("/") ? (
+              <Link
+                key={label}
+                href={href}
+                onClick={() => setMenuOpen(false)}
+                style={{ ...serif, fontSize: "2.5rem", color: WHITE, textDecoration: "none" }}
+              >
+                {label}
+              </Link>
+            ) : (
+              <a
+                key={label}
+                href={href}
+                onClick={(e) => handleAnchorClick(e, href)}
+                style={{ ...serif, fontSize: "2.5rem", color: WHITE, textDecoration: "none" }}
+              >
+                {label}
+              </a>
+            )
           ))}
         </div>
       )}
@@ -960,117 +955,94 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         </div>
       </section>
 
-      {/* About Section - Screen Size with Pinned Frame Sequence (frame-1 -> frame-22) */}
+      {/* About Section - Studio Showcase with Shop Image & Link to Founders */}
       <section
         id="about"
-        className="w-full h-screen min-h-screen relative overflow-hidden flex flex-col justify-between px-6 lg:px-14 py-8"
+        className="w-full min-h-screen min-h-[100dvh] relative overflow-hidden flex flex-col justify-center px-6 lg:px-14 xl:px-20 py-20 md:py-28"
         style={{ borderTop: `1px solid ${BORDER}`, background: BG_DARK }}
       >
-        <div style={{ maxWidth: 1600, width: "100%", margin: "0 auto" }} className="h-full flex flex-col justify-between">          
-          {/* Main Grid: Pinned Frame Showcase on Left, Text + Stats on Right */}
-          <div className="grid md:grid-cols-12 gap-8 items-center flex-1 my-auto">
-            {/* Pinned Frame Showcase */}
-            <div className="gsap-about-frame-container md:col-span-6 lg:col-span-6 h-[72vh] md:h-[86vh] lg:h-[90vh] relative rounded-xl overflow-hidden border border-white/10 bg-[#070707] shadow-2xl flex items-center justify-center p-0.5">
-              {/* High-DPI Canvas */}
-              <canvas
-                ref={canvasRef}
-                className="w-full h-full object-contain relative z-10"
-              />
-              {/* Fallback image while canvas initializes */}
-              <img
-                src="/amp-rahul-pics/frame-001.jpg"
-                alt="AMP Studio frame sequence"
-                className="absolute inset-0 w-full h-full object-cover transition-opacity duration-150"
-                style={{ opacity: framesLoaded ? 0 : 1 }}
-              />
-              {/* Decorative Glass Overlay & Frame Badge */}
-              {/* <div className="absolute inset-0 pointer-events-none rounded-2xl ring-1 ring-white/10" />
-              <div className="absolute bottom-3 left-4 right-4 flex justify-between items-center z-20 text-[0.6rem] font-mono uppercase text-white/40 tracking-widest bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10">
-                <span>AMP Studio Story</span>
-                <span className="text-[#ffc800]">Rahul · 2025</span>
-              </div> */}
+        <div className="w-full my-auto" style={{ maxWidth: 1480, margin: "0 auto" }}>          
+          {/* Main Grid: Studio Shop Image on Left, Text + Stats on Right */}
+          <div className="grid md:grid-cols-12 gap-10 md:gap-12 lg:gap-16 items-center">
+            {/* Studio Workspace / Shop Image */}
+            <div className="gsap-about-frame-container md:col-span-6 relative rounded-2xl overflow-hidden border border-white/15 bg-[#070707] shadow-2xl group">
+              <div className="aspect-[4/3] sm:aspect-[16/10] md:aspect-[4/3] lg:aspect-[16/11] xl:aspect-[5/4] w-full relative overflow-hidden min-h-[340px] md:min-h-[460px] lg:min-h-[540px]">
+                <img
+                  src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=1400&q=85&fit=crop&auto=format"
+                  alt="AMP Studio photography workspace and studio in Bijapur"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+              </div>
             </div>
 
-            {/* About Text + Stat Counters */}
-            <div className="md:col-span-6 lg:col-span-6 flex flex-col justify-center pl-0 md:pl-8">
+            {/* About Text + Stat Counters + About Founders Button */}
+            <div className="md:col-span-6 flex flex-col justify-center space-y-7 md:space-y-8">
+              {/* Subtle kicker badge */}
+              <div className="flex items-center gap-3">
+                <span
+                  style={{ ...mono }}
+                  className="text-[0.68rem] text-[#ffc800] tracking-[0.25em] uppercase font-medium"
+                >
+                  About The Studio
+                </span>
+                <div className="h-px flex-1 bg-gradient-to-r from-[#ffc800]/40 to-transparent max-w-[120px]" />
+              </div>
+
               <p
-                className="gsap-about-text flex flex-wrap items-baseline"
+                className="gsap-about-text"
                 style={{
                   ...serif,
                   fontWeight: 300,
-                  fontSize: "clamp(1.75rem, 3.2vw, 2.85rem)",
+                  fontSize: "clamp(1.9rem, 2.75vw, 2.75rem)",
                   letterSpacing: "-0.02em",
-                  lineHeight: 1.35,
-                  marginBottom: "2.5rem",
+                  lineHeight: 1.38,
+                  color: WHITE,
                 }}
               >
-                {[
-                  { text: "AMP", isGold: false },
-                  { text: "Studio", isGold: false },
-                  { text: "is", isGold: false },
-                  { text: "a", isGold: false },
-                  { text: "photography", isGold: true, font: script },
-                  { text: "and", isGold: true, font: script },
-                  { text: "videography", isGold: true, font: script },
-                  { text: "studio", isGold: false },
-                  { text: "based", isGold: false },
-                  { text: "in", isGold: false },
-                  { text: "Bijapur,", isGold: false },
-                  { text: "Karnataka.", isGold: false },
-                  { text: "We", isGold: false },
-                  { text: "cover", isGold: false },
-                  { text: "weddings,", isGold: false },
-                  { text: "engagements,", isGold: false },
-                  { text: "and", isGold: false },
-                  { text: "portraits", isGold: false },
-                  { text: "across", isGold: false },
-                  { text: "North", isGold: false },
-                  { text: "Karnataka", isGold: false },
-                  { text: "in", isGold: false },
-                  { text: "a", isGold: false },
-                  { text: "natural,", isGold: false },
-                  { text: "candid", isGold: false },
-                  { text: "style.", isGold: false },
-                ].map(({ text, isGold, font }, idx) => (
-                  <span
-                    key={idx}
-                    className={`about-word inline-block mr-[0.3em] ${isGold ? "about-gold" : ""}`}
-                    style={{
-                      color: isGold ? "rgba(255, 200, 0, 0.2)" : "rgba(245, 240, 232, 0.2)",
-                      transition: "color 0.15s ease",
-                      ...(font ?? {}),
-                    }}
-                  >
-                    {text}
-                  </span>
-                ))}
+                AMP Studio is a <span style={{ ...script, color: GOLD }} className="text-4xl md:text-5xl lg:text-6xl font-normal">photography</span> and <span style={{ ...script, color: GOLD }} className="text-4xl md:text-5xl lg:text-6xl font-normal">videography</span> studio based in Bijapur, Karnataka. We cover weddings, engagements, and portraits across North Karnataka in a natural, candid style.
               </p>
 
-              {/* Amma Mahadevi Founder Showcase Card */}
-              <div className="flex items-center gap-4 mb-6 p-3 rounded-2xl bg-[#121212] border border-[#222222] shadow-xl">
-                <div className="w-16 h-20 md:w-20 md:h-24 rounded-xl overflow-hidden flex-shrink-0 border border-white/15 shadow-md">
-                  <img
-                    src="/amma-mahadevi-about.jpg"
-                    alt="Amma Mahadevi - Founder & Lead Photographer at AMP Studio"
-                    className="w-full h-full object-cover object-top filter contrast-[1.03]"
-                  />
-                </div>
-                <div className="flex flex-col justify-center">
-                  <div style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase mt-0.5">
-                    Lead Photographer & Artist
+              {/* Founder Showcase Card with Read More link */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 md:p-5 rounded-2xl bg-[#141414] border border-[#222222] hover:border-[#ffc800]/30 transition-all shadow-xl">
+                <div className="flex items-center gap-4 md:gap-5">
+                  <div className="w-14 h-16 sm:w-16 sm:h-20 md:w-18 md:h-22 rounded-xl overflow-hidden flex-shrink-0 border border-white/15 shadow-md">
+                    <img
+                      src="/amma-mahadevi-about.jpg"
+                      alt="Amma Mahadevi - Founder & Lead Photographer at AMP Studio"
+                      className="w-full h-full object-cover object-top filter contrast-[1.03]"
+                    />
                   </div>
-                  <p style={{ ...sans }} className="text-xs text-[#888882] mt-1 max-w-sm leading-relaxed">
-                    Capturing the essence of photography in Bijapur & North Karnataka.
-                  </p>
+                  <div className="flex flex-col justify-center">
+                    <div style={{ ...serif }} className="text-lg sm:text-xl md:text-2xl text-white font-light">
+                      Amma Mahadevi
+                    </div>
+                    <div style={{ ...mono }} className="text-[0.65rem] sm:text-xs text-[#ffc800] tracking-widest uppercase mt-0.5">
+                      Founder & Lead Photographer
+                    </div>
+                    <p style={{ ...sans }} className="text-xs sm:text-sm text-[#888882] mt-1 max-w-sm leading-relaxed hidden sm:block">
+                      Capturing authentic connections across Bijapur & North Karnataka.
+                    </p>
+                  </div>
                 </div>
+
+                <Link
+                  href="/founders"
+                  style={{ ...mono }}
+                  className="px-5 py-2.5 rounded-full border border-[#ffc800]/40 text-[#ffc800] hover:bg-[#ffc800] hover:text-black text-xs uppercase tracking-wider transition-all whitespace-nowrap flex items-center justify-center gap-2 group/btn self-start sm:self-auto"
+                >
+                  <span>About Founders</span>
+                  <span className="transition-transform duration-200 group-hover/btn:translate-x-1">→</span>
+                </Link>
               </div>
 
-              <div className="gsap-about-stats grid grid-cols-3 gap-6 pt-6 border-t border-[#1e1e1e]">
+              {/* About Stats */}
+              <div className="gsap-about-stats grid grid-cols-3 gap-6 md:gap-8 pt-7 border-t border-[#1e1e1e]">
                 <div className="gsap-stat-item">
-                  <div style={{ ...serif, fontSize: "clamp(2rem, 3.5vw, 2.75rem)", fontWeight: 300, lineHeight: 1, color: WHITE }}>
+                  <div style={{ ...serif, fontSize: "clamp(2.2rem, 3.4vw, 3rem)", fontWeight: 300, lineHeight: 1, color: WHITE }}>
                     {stat1.toLocaleString()}+
                   </div>
-                  <div style={{ ...mono, fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>
+                  <div style={{ ...mono, fontSize: "0.68rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>
                     Sessions completed
                   </div>
                 </div>
@@ -1078,25 +1050,25 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
                   <div
                     style={{
                       ...mono,
-                      fontSize: "clamp(1.75rem, 2.5vw, 2.35rem)",
+                      fontSize: "clamp(1.6rem, 2.4vw, 2.2rem)",
                       fontWeight: 500,
                       lineHeight: 1,
                       color: GOLD,
-                      letterSpacing: "0.22em",
+                      letterSpacing: "0.2em",
                       textShadow: "0 0 16px rgba(255,200,0,0.45)",
                     }}
                   >
                     ★★★★★
                   </div>
-                  <div style={{ ...mono, fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>
+                  <div style={{ ...mono, fontSize: "0.68rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>
                     5-Star Client Rating
                   </div>
                 </div>
                 <div className="gsap-stat-item">
-                  <div style={{ ...serif, fontSize: "clamp(2rem, 3.5vw, 2.75rem)", fontWeight: 300, lineHeight: 1, color: WHITE }}>
+                  <div style={{ ...serif, fontSize: "clamp(2.2rem, 3.4vw, 3rem)", fontWeight: 300, lineHeight: 1, color: WHITE }}>
                     {stat2} yrs
                   </div>
-                  <div style={{ ...mono, fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>
+                  <div style={{ ...mono, fontSize: "0.68rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>
                     Photography experience
                   </div>
                 </div>
@@ -1107,19 +1079,19 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       </section>
 
       {/* Gallery */}
-      <section id="work" style={{ padding: "4rem 1.5rem 6rem" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div className="gsap-work-header flex flex-col gap-3 mb-12">
+      <section id="work" className="relative overflow-hidden w-full" style={{ padding: "5rem 1.5rem 6rem" }}>
+        <div style={{ maxWidth: 1400, margin: "0 auto" }}>
+          <div className="gsap-work-header flex flex-col gap-3 mb-10 max-w-2xl">
             <h2 style={{ ...serif, fontWeight: 300, fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", letterSpacing: "-0.025em", lineHeight: 1.1, color: WHITE }} className="whitespace-nowrap flex items-baseline gap-3">
               <span>Recent</span>
               <em style={{ ...script, color: GOLD }}>Work</em>
             </h2>
-            <p className="text-sm md:text-base leading-relaxed max-w-xl" style={{ color: MUTED }}>
+            <p className="text-sm md:text-base leading-relaxed" style={{ color: MUTED }}>
               Photos from weddings, engagements, maternity, and family sessions across Bijapur and North Karnataka.
             </p>
           </div>
 
-          {/* Interactive photo shelf: browse each session as a book, click to open */}
+          {/* Interactive photo shelf: continuous sliding 3D books, pause on hover, click to explore */}
           <div className="gsap-gallery-grid">
             <PhotoShelf
               items={galleryItems}
