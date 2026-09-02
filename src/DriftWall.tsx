@@ -33,6 +33,7 @@ export type DriftWallProps = {
   overlayColor?: string;
   className?: string;
   style?: React.CSSProperties;
+  onItemClick?: (item: DriftWallItem) => void;
 };
 
 const DEFAULT_ITEMS: DriftWallItem[] = Array.from({ length: 15 }, (_, i) => {
@@ -76,6 +77,7 @@ const DriftWall = ({
   overlayColor = "#060010",
   className = "",
   style,
+  onItemClick,
 }: DriftWallProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const planeRef = useRef<HTMLDivElement>(null);
@@ -281,7 +283,15 @@ const DriftWall = ({
       );
     }
     return (
-      <div key={id} tabIndex={0} role="button" aria-label={item.title ?? "tile"} {...commonProps}>
+      <div
+        key={id}
+        tabIndex={0}
+        role="button"
+        aria-label={item.title ?? "tile"}
+        onClick={() => onItemClick?.(item)}
+        style={{ cursor: onItemClick ? "pointer" : undefined }}
+        {...commonProps}
+      >
         {inner}
       </div>
     );

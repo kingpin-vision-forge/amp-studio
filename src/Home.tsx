@@ -5,8 +5,10 @@ import { useState, useEffect, useRef } from "react";
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import DriftWall from "./DriftWall";
+import DriftWall, { type DriftWallItem } from "./DriftWall";
 import PhotoShelf, { type ShelfItem } from "./PhotoShelf";
+import PhotoModal, { type PhotoModalItem } from "./PhotoModal";
+import LegalModal, { type LegalTab } from "./LegalModal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -47,7 +49,6 @@ const services = [
     num: "01",
     name: "Weddings & Elopements",
     desc: "Full-day and half-day wedding photography and videography in Bijapur and North Karnataka for haldi, mehendi, mandap rituals, baraat, and receptions, shot candidly as they happen.",
-    price: "From ₹45,000",
     img: "photo-1606800052052-a08af7148866",
     alt: "Wedding photography in Bijapur, Karnataka",
   },
@@ -55,7 +56,6 @@ const services = [
     num: "02",
     name: "Couples & Engagements",
     desc: "Pre-wedding and engagement shoots at locations around Bijapur including Gol Gumbaz, Ibrahim Rauza, Bara Kaman, or anywhere meaningful to you.",
-    price: "From ₹12,000",
     img: "photo-1519225421980-715cb0215aed",
     alt: "Engagement and pre-wedding photography in Bijapur",
   },
@@ -63,7 +63,6 @@ const services = [
     num: "03",
     name: "Family Portraits",
     desc: "Family portrait sessions at home or outdoors for families across Bijapur and Vijayapura district.",
-    price: "From ₹8,000",
     img: "photo-1555252333-9f8e92e65df9",
     alt: "Family portrait photography in Bijapur",
   },
@@ -71,7 +70,6 @@ const services = [
     num: "04",
     name: "Maternity",
     desc: "Natural maternity photography for expecting parents in Bijapur, in-studio or at home, scheduled around your due date.",
-    price: "From ₹7,500",
     img: "photo-1476703993599-0035a21b17a9",
     alt: "Maternity photography in Bijapur",
   },
@@ -79,7 +77,6 @@ const services = [
     num: "05",
     name: "Portrait Sessions",
     desc: "Individual portrait sessions in natural light for professionals, students, and creators across Bijapur.",
-    price: "From ₹6,000",
     img: "photo-1531746020798-e6953c6e8e04",
     alt: "Portrait photography session in Bijapur",
   },
@@ -151,7 +148,15 @@ const testimonials = [
 
 
 /* Dynamic Interactive Service Row with 3D Hover Image Expansion */
-function ServiceRow({ svc, i }: { svc: (typeof services)[0]; i: number }) {
+function ServiceRow({
+  svc,
+  i,
+  onPhotoClick,
+}: {
+  svc: (typeof services)[0];
+  i: number;
+  onPhotoClick?: (item: PhotoModalItem) => void;
+}) {
   const [isHovered, setIsHovered] = useState(false);
   const [rotX, setRotX] = useState(0);
   const [rotY, setRotY] = useState(0);
@@ -188,41 +193,43 @@ function ServiceRow({ svc, i }: { svc: (typeof services)[0]; i: number }) {
     >
       <div className="flex flex-col md:grid md:grid-cols-12 gap-4 items-start md:items-center">
         {/* Number + Title + Description */}
-        <div className="w-full md:col-span-6 flex flex-col gap-1">
-          <div className="flex items-center justify-between md:justify-start gap-3">
-            <div className="flex items-center gap-3">
-              <span
-                style={{ ...mono }}
-                className={`text-xs md:text-sm tracking-widest transition-colors duration-300 ${
-                  isHovered ? "text-[#ffc800] font-semibold" : "text-[#888882]"
-                }`}
-              >
-                {svc.num}
-              </span>
-              <h3
-                style={{ ...serif }}
-                className={`text-xl md:text-3xl font-light transition-all duration-300 ${
-                  isHovered ? "text-[#ffc800] translate-x-1" : "text-white"
-                }`}
-              >
-                {svc.name}
-              </h3>
-            </div>
-            {/* Mobile Price */}
+        <div className="w-full md:col-span-8 flex flex-col gap-1">
+          <div className="flex items-center gap-3">
             <span
-              style={{ ...serif }}
-              className="md:hidden text-sm font-light italic text-[#ffc800]"
+              style={{ ...mono }}
+              className={`text-xs md:text-sm tracking-widest transition-colors duration-300 ${
+                isHovered ? "text-[#ffc800] font-semibold" : "text-[#888882]"
+              }`}
             >
-              {svc.price}
+              {svc.num}
             </span>
+            <h3
+              style={{ ...serif }}
+              className={`text-xl md:text-3xl font-light transition-all duration-300 ${
+                isHovered ? "text-[#ffc800] translate-x-1" : "text-white"
+              }`}
+            >
+              {svc.name}
+            </h3>
           </div>
-          <p className="text-xs md:text-sm text-[#888882] leading-relaxed max-w-lg font-sans pl-7 md:pl-8">
+          <p className="text-xs md:text-sm text-[#888882] leading-relaxed max-w-xl font-sans pl-7 md:pl-8 mt-1">
             {svc.desc}
           </p>
         </div>
 
-        {/* Center / Right: Dynamic Image Preview */}
-        <div className="w-full md:col-span-4 flex justify-start md:justify-center items-center relative z-20 my-2 md:my-0 pl-7 md:pl-0">
+        {/* Right: Dynamic Image Preview (Click to open photo separately) */}
+        <div
+          className="w-full md:col-span-4 flex justify-start md:justify-end items-center relative z-20 my-2 md:my-0 pl-7 md:pl-0"
+          onClick={(e) => {
+            e.stopPropagation();
+            onPhotoClick?.({
+              image: `https://images.unsplash.com/${svc.img}?w=1600&q=90&fit=crop&auto=format`,
+              title: svc.name,
+              category: "AMP Studio · Services Archive",
+              location: "Bijapur, Karnataka",
+            });
+          }}
+        >
           <div
             className={`relative rounded-xl md:rounded-2xl overflow-hidden shadow-xl transition-all duration-500 ease-out border ${
               isHovered
@@ -245,26 +252,8 @@ function ServiceRow({ svc, i }: { svc: (typeof services)[0]; i: number }) {
               }`}
             />
             {/* Dark Vignette Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
-
-            {/* Badge Overlay */}
-            <div className="absolute bottom-2.5 left-2.5 right-2.5 flex justify-between items-center text-[0.65rem] font-mono text-white/90 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/15">
-              <span className="text-[#ffc800] font-semibold">{svc.num}</span>
-              <span className="truncate max-w-[140px]">{svc.name}</span>
-            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
           </div>
-        </div>
-
-        {/* Desktop Price Tag */}
-        <div className="hidden md:flex md:col-span-2 justify-end items-center">
-          <span
-            style={{ ...serif }}
-            className={`text-lg md:text-xl font-light italic transition-colors duration-300 ${
-              isHovered ? "text-[#ffc800]" : "text-[#888882]"
-            }`}
-          >
-            {svc.price}
-          </span>
         </div>
       </div>
     </div>
@@ -281,6 +270,8 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [stat1, setStat1] = useState(0);
   const [stat2, setStat2] = useState(0);
+  const [selectedPhoto, setSelectedPhoto] = useState<PhotoModalItem | null>(null);
+  const [legalTab, setLegalTab] = useState<LegalTab | null>(null);
 
   /* Frame Sequence State & Refs */
   const frameBadgeRef = useRef<HTMLDivElement | null>(null);
@@ -431,9 +422,25 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
     if (href.startsWith("#")) {
       e.preventDefault();
       setMenuOpen(false);
-      const target = document.querySelector(href);
-      if (target && lenisRef.current) {
-        lenisRef.current.scrollTo(target as HTMLElement, { offset: -60, duration: 1.2 });
+
+      if (href === "#" || href === "#top") {
+        if (lenisRef.current) {
+          lenisRef.current.scrollTo(0, { duration: 1.2 });
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+        return;
+      }
+
+      try {
+        const target = document.querySelector(href);
+        if (target && lenisRef.current) {
+          lenisRef.current.scrollTo(target as HTMLElement, { offset: -60, duration: 1.2 });
+        } else if (target) {
+          target.scrollIntoView({ behavior: "smooth" });
+        }
+      } catch (err) {
+        console.warn("Invalid anchor selector:", href, err);
       }
     }
   };
@@ -542,9 +549,9 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
           trigger: ".gsap-about-stats",
           start: "top 90%",
         },
-        val1: 500,
+        val1: 11467,
         val2: 8,
-        duration: 2,
+        duration: 2.2,
         ease: "power2.out",
         onUpdate: () => {
           setStat1(Math.floor(counterObj.val1));
@@ -718,7 +725,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
   return (
     <div
       ref={mainRef}
-      className="no-cursor overflow-x-hidden"
+      className="no-cursor overflow-x-hidden hide-scrollbar"
       style={{ ...sans, background: BG, color: WHITE, minHeight: "100vh" }}
       onMouseMove={() => addHoverListeners(mainRef.current)}
     >
@@ -866,8 +873,15 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
             ))}
           </h1>
 
+          {/* <p
+            className="gsap-hero-desc mt-6 text-sm md:text-base text-[#ffc800] tracking-wide"
+            style={{ ...serif, fontStyle: "italic", fontSize: "clamp(1.1rem, 1.8vw, 1.35rem)" }}
+          >
+            “Capturing the essence of photography in Bijapur”
+          </p> */}
+
           <p
-            className="gsap-hero-desc mt-8 leading-relaxed max-w-xs"
+            className="gsap-hero-desc mt-4 leading-relaxed max-w-sm"
             style={{ fontSize: "0.875rem", color: MUTED }}
           >
             Wedding and event photography and videography in Bijapur,
@@ -921,6 +935,14 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
             radius={2}
             roll={0}
             pauseOnHover
+            onItemClick={(item: DriftWallItem) => {
+              setSelectedPhoto({
+                image: item.image.replace("w=600", "w=1600"),
+                title: item.title || "AMP Studio Photography",
+                category: "Bijapur Photography Archive",
+                location: "Bijapur, Karnataka",
+              });
+            }}
           />
           {/* gradient blend left */}
           <div
@@ -1038,23 +1060,45 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
                     Lead Photographer & Artist
                   </div>
                   <p style={{ ...sans }} className="text-xs text-[#888882] mt-1 max-w-sm leading-relaxed">
-                    Capturing timeless wedding, portrait, and event stories across Bijapur & North Karnataka.
+                    Capturing the essence of photography in Bijapur & North Karnataka.
                   </p>
                 </div>
               </div>
 
               <div className="gsap-about-stats grid grid-cols-3 gap-6 pt-6 border-t border-[#1e1e1e]">
                 <div className="gsap-stat-item">
-                  <div style={{ ...serif, fontSize: "2.5rem", fontWeight: 300, lineHeight: 1, color: WHITE }}>{stat1}+</div>
-                  <div style={{ ...mono, fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>Sessions completed</div>
+                  <div style={{ ...serif, fontSize: "clamp(2rem, 3.5vw, 2.75rem)", fontWeight: 300, lineHeight: 1, color: WHITE }}>
+                    {stat1.toLocaleString()}+
+                  </div>
+                  <div style={{ ...mono, fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>
+                    Sessions completed
+                  </div>
                 </div>
                 <div className="gsap-stat-item">
-                  <div style={{ ...mono, fontSize: "1.75rem", fontWeight: 400, lineHeight: 1, color: GOLD, letterSpacing: "0.15em" }}>★★★★★</div>
-                  <div style={{ ...mono, fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>Client rating</div>
+                  <div
+                    style={{
+                      ...mono,
+                      fontSize: "clamp(1.75rem, 2.5vw, 2.35rem)",
+                      fontWeight: 500,
+                      lineHeight: 1,
+                      color: GOLD,
+                      letterSpacing: "0.22em",
+                      textShadow: "0 0 16px rgba(255,200,0,0.45)",
+                    }}
+                  >
+                    ★★★★★
+                  </div>
+                  <div style={{ ...mono, fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>
+                    5-Star Client Rating
+                  </div>
                 </div>
                 <div className="gsap-stat-item">
-                  <div style={{ ...serif, fontSize: "2.5rem", fontWeight: 300, lineHeight: 1, color: WHITE }}>{stat2} yrs</div>
-                  <div style={{ ...mono, fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>Photography experience</div>
+                  <div style={{ ...serif, fontSize: "clamp(2rem, 3.5vw, 2.75rem)", fontWeight: 300, lineHeight: 1, color: WHITE }}>
+                    {stat2} yrs
+                  </div>
+                  <div style={{ ...mono, fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>
+                    Photography experience
+                  </div>
                 </div>
               </div>
             </div>
@@ -1077,7 +1121,10 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
 
           {/* Interactive photo shelf: browse each session as a book, click to open */}
           <div className="gsap-gallery-grid">
-            <PhotoShelf items={galleryItems} />
+            <PhotoShelf
+              items={galleryItems}
+              onPhotoClick={(item) => setSelectedPhoto(item)}
+            />
           </div>
         </div>
       </section>
@@ -1098,7 +1145,12 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
 
           <div className="gsap-services-list flex flex-col gap-2">
             {services.map((svc, i) => (
-              <ServiceRow key={svc.num} svc={svc} i={i} />
+              <ServiceRow
+                key={svc.num}
+                svc={svc}
+                i={i}
+                onPhotoClick={(item) => setSelectedPhoto(item)}
+              />
             ))}
           </div>
         </div>
@@ -1142,7 +1194,18 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
                 onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = "#2a2a2a")}
                 onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = BORDER)}
               >
-                <div style={{ ...mono, fontSize: "0.7rem", color: MUTED, letterSpacing: "0.15em", marginBottom: "1.25rem" }}>{t.stars}</div>
+                <div
+                  style={{
+                    ...mono,
+                    fontSize: "1.25rem",
+                    color: GOLD,
+                    letterSpacing: "0.2em",
+                    marginBottom: "1.25rem",
+                    textShadow: "0 0 10px rgba(255,200,0,0.35)",
+                  }}
+                >
+                  {t.stars}
+                </div>
                 <p style={{ ...serif, fontSize: "1rem", fontStyle: "italic", color: MUTED, lineHeight: 1.75, marginBottom: "1.25rem" }}>{t.text}</p>
                 <div className="flex items-center gap-3">
                   <div className="rounded-full overflow-hidden flex-shrink-0" style={{ width: 36, height: 36, background: "#2a2a2a" }}>
@@ -1257,6 +1320,33 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
           <span style={{ color: GOLD, fontWeight: 500 }}>KingpiN Vision Forge</span>
         </div>
 
+        {/* Legal Links (T&C, Privacy Policy, Cookie Policy) */}
+        <div className="flex flex-wrap justify-center items-center gap-4 md:gap-5 my-2 md:my-0">
+          <button
+            onClick={() => setLegalTab("terms")}
+            style={{ ...mono, fontSize: "0.65rem", color: MUTED, textTransform: "uppercase", letterSpacing: "0.15em", background: "none", border: "none", padding: 0 }}
+            className="hover:text-white cursor-pointer transition-colors"
+          >
+            Terms & Conditions
+          </button>
+          <span className="text-white/20 text-xs">·</span>
+          <button
+            onClick={() => setLegalTab("privacy")}
+            style={{ ...mono, fontSize: "0.65rem", color: MUTED, textTransform: "uppercase", letterSpacing: "0.15em", background: "none", border: "none", padding: 0 }}
+            className="hover:text-white cursor-pointer transition-colors"
+          >
+            Privacy Policy
+          </button>
+          <span className="text-white/20 text-xs">·</span>
+          <button
+            onClick={() => setLegalTab("cookie")}
+            style={{ ...mono, fontSize: "0.65rem", color: MUTED, textTransform: "uppercase", letterSpacing: "0.15em", background: "none", border: "none", padding: 0 }}
+            className="hover:text-white cursor-pointer transition-colors"
+          >
+            Cookie Policy
+          </button>
+        </div>
+
         {/* Right: Social Links */}
         <div className="flex gap-6">
           {["Instagram", "Pinterest", "Contact"].map((link) => (
@@ -1273,6 +1363,19 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
           ))}
         </div>
       </footer>
+
+      {/* Standalone Photo Viewer Modal */}
+      <PhotoModal
+        photo={selectedPhoto}
+        onClose={() => setSelectedPhoto(null)}
+      />
+
+      {/* Terms & Conditions / Privacy Policy / Cookie Policy Modal */}
+      <LegalModal
+        activeTab={legalTab}
+        onClose={() => setLegalTab(null)}
+        onSelectTab={(tab) => setLegalTab(tab)}
+      />
     </div>
   );
 }

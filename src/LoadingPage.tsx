@@ -48,6 +48,24 @@ export default function LoadingPage() {
 
         {/* Right: Typography Showcase with Clean Word Spacing */}
         <div className="flex flex-col justify-center text-center md:text-left">
+          {/* 3 Years Legacy Pill */}
+          <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
+            <span
+              style={{ ...mono }}
+              className="inline-flex items-center gap-1.5 px-3 py-1 text-[1rem] tracking-[1.25em] uppercase text-[#ffc800]"
+            >
+              <span className="w-1.5 h-1.5" />
+              3 YEARS OF EXCELLENCE
+            </span>
+          </div>
+
+          <div
+            style={{ ...serif }}
+            className="text-xl md:text-2xl font-medium text-white tracking-widest uppercase leading-tight"
+          >
+            CAPTURING
+          </div>
+
           {/* Line 1: THE */}
           <div
             style={{ ...serif }}
@@ -79,11 +97,18 @@ export default function LoadingPage() {
               PHOTOGRAPHY
             </span>
           </div>
+          <span
+              style={{ ...serif }}
+              className="text-xl md:text-2xl font-light text-white tracking-[0.18em] uppercase"
+            >
+              in BIJAPUR
+            </span>
         </div>
       </div>
 
-      {/* Bottom Metadata Footer (No Loader Line) */}
+      {/* Bottom Metadata Footer */}
       <div className="relative z-10 w-full flex justify-between items-center text-[0.65rem] font-mono text-white/30 tracking-[0.2em] uppercase">
+        <span className="text-[#ffc800]/70">BIJAPUR · 3 YEARS CELEBRATION</span>
         <span>READY FOR SHUTTER RELEASE</span>
       </div>
     </div>

@@ -22,7 +22,13 @@ const serif = { fontFamily: "Italiana, serif" } as const;
 const script = { fontFamily: "Italianno, serif" } as const;
 const mono = { fontFamily: "DM Mono, monospace" } as const;
 
-export default function PhotoShelf({ items }: { items: ShelfItem[] }) {
+export default function PhotoShelf({
+  items,
+  onPhotoClick,
+}: {
+  items: ShelfItem[];
+  onPhotoClick?: (item: { image: string; title: string; category?: string; location?: string }) => void;
+}) {
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [coverOpen, setCoverOpen] = useState(false);
   const [activePhotoIdx, setActivePhotoIdx] = useState(0);
@@ -157,18 +163,34 @@ export default function PhotoShelf({ items }: { items: ShelfItem[] }) {
                   </div>
                 </div>
 
-                {/* Right Page: Full Photo Preview */}
-                <div className="w-1/2 h-full relative bg-black flex items-center justify-center overflow-hidden">
+                {/* Right Page: Full Photo Preview (Click to view full photo separately) */}
+                <div
+                  className="w-1/2 h-full relative bg-black flex items-center justify-center overflow-hidden cursor-pointer group/photo"
+                  onClick={() => {
+                    onPhotoClick?.({
+                      image: selectedItem.image.replace("w=900", "w=1800"),
+                      title: selectedItem.title,
+                      category: `Collection · ${selectedItem.meta}`,
+                      location: "Bijapur, Karnataka",
+                    });
+                  }}
+                  title="Click to view photo separately"
+                >
                   <img
                     src={selectedItem.image}
                     alt={selectedItem.title}
-                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover/photo:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
                   {/* Photo Caption Badge */}
                   <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center text-xs font-mono text-white/80 bg-black/60 backdrop-blur-md px-3 py-2 rounded-lg border border-white/10">
-                    <span>AMP Studio Original</span>
+                    <span className="flex items-center gap-1.5">
+                      <span>AMP Studio Original</span>
+                      <span className="text-[0.6rem] text-[#ffc800] tracking-widest uppercase ml-1 opacity-70">
+                        [Click to enlarge]
+                      </span>
+                    </span>
                     <span className="text-[#ffc800]">{selectedItem.title}</span>
                   </div>
                 </div>
