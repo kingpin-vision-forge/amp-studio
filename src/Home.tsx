@@ -1003,36 +1003,15 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
                 AMP Studio is a <span style={{ ...script, color: GOLD }} className="text-4xl md:text-5xl lg:text-6xl font-normal">photography</span> and <span style={{ ...script, color: GOLD }} className="text-4xl md:text-5xl lg:text-6xl font-normal">videography</span> studio based in Bijapur, Karnataka. We cover weddings, engagements, and portraits across North Karnataka in a natural, candid style.
               </p>
 
-              {/* Founder Showcase Card with Read More link */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 md:p-5 rounded-2xl bg-[#141414] border border-[#222222] hover:border-[#ffc800]/30 transition-all shadow-xl">
-                <div className="flex items-center gap-4 md:gap-5">
-                  <div className="w-14 h-16 sm:w-16 sm:h-20 md:w-18 md:h-22 rounded-xl overflow-hidden flex-shrink-0 border border-white/15 shadow-md">
-                    <img
-                      src="/amma-mahadevi-about.jpg"
-                      alt="Amma Mahadevi - Founder & Lead Photographer at AMP Studio"
-                      className="w-full h-full object-cover object-top filter contrast-[1.03]"
-                    />
-                  </div>
-                  <div className="flex flex-col justify-center">
-                    <div style={{ ...serif }} className="text-lg sm:text-xl md:text-2xl text-white font-light">
-                      Amma Mahadevi
-                    </div>
-                    <div style={{ ...mono }} className="text-[0.65rem] sm:text-xs text-[#ffc800] tracking-widest uppercase mt-0.5">
-                      Founder & Lead Photographer
-                    </div>
-                    <p style={{ ...sans }} className="text-xs sm:text-sm text-[#888882] mt-1 max-w-sm leading-relaxed hidden sm:block">
-                      Capturing authentic connections across Bijapur & North Karnataka.
-                    </p>
-                  </div>
-                </div>
-
+              {/* Rectangular "About the founders" CTA button */}
+              <div className="pt-1">
                 <Link
                   href="/founders"
                   style={{ ...mono }}
-                  className="px-5 py-2.5 rounded-full border border-[#ffc800]/40 text-[#ffc800] hover:bg-[#ffc800] hover:text-black text-xs uppercase tracking-wider transition-all whitespace-nowrap flex items-center justify-center gap-2 group/btn self-start sm:self-auto"
+                  className="inline-flex items-center gap-3 px-7 py-3.5 border border-[#ffc800] text-[#ffc800] hover:bg-[#ffc800] hover:text-black text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300 group"
                 >
-                  <span>About Founders</span>
-                  <span className="transition-transform duration-200 group-hover/btn:translate-x-1">→</span>
+                  <span>About the founders</span>
+                  <span className="transition-transform duration-300 group-hover:translate-x-1.5">→</span>
                 </Link>
               </div>
 

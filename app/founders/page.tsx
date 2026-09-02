@@ -241,10 +241,6 @@ export default function FoundersPage() {
           <span style={{ ...mono }} className="text-xs tracking-widest uppercase text-white/50 hover:text-white">
             ← Return to Main
           </span>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#ffc800]" />
-          <span style={{ ...serif }} className="text-lg tracking-wider font-light">
-            AMP STUDIO
-          </span>
         </Link>
 
         <div style={{ ...mono }} className="text-[0.65rem] text-white/50 tracking-[0.2em] uppercase hidden sm:block">
@@ -254,7 +250,7 @@ export default function FoundersPage() {
         <Link
           href="/#contact"
           style={{ ...mono }}
-          className="text-xs uppercase tracking-widest px-4 py-2 rounded-full border border-white/20 bg-white/5 hover:bg-white text-white hover:text-black transition-all"
+          className="text-xs uppercase tracking-widest px-4 py-2 border border-white/20 bg-white/5 hover:bg-white text-white hover:text-black transition-all"
         >
           Book a Session
         </Link>
@@ -262,12 +258,6 @@ export default function FoundersPage() {
 
       {/* Hero: Amma Mahadevi Lead Photographer Showcase */}
       <section className="pt-36 pb-20 px-6 lg:px-14 max-w-7xl mx-auto">
-        <div className="flex items-center gap-4 mb-6">
-          <span style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase px-3 py-1 rounded-full bg-[#ffc800]/10 border border-[#ffc800]/20">
-            Founder & Lead Visionary
-          </span>
-          <div className="h-px flex-1 bg-white/10 max-w-xs" />
-        </div>
 
         <div className="grid md:grid-cols-12 gap-12 items-center">
           {/* Left: Lead Photographer Portrait Image */}
@@ -282,9 +272,6 @@ export default function FoundersPage() {
 
               <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
                 <div>
-                  <h1 style={{ ...serif }} className="text-3xl text-white font-light">
-                    Amma Mahadevi
-                  </h1>
                   <p style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase mt-1">
                     Founder & Principal Artist
                   </p>
@@ -306,7 +293,7 @@ export default function FoundersPage() {
             </h2>
 
             <p style={{ ...sans }} className="text-base text-[#a0a09a] leading-relaxed font-light">
-              Founded in Bijapur by Amma Mahadevi, AMP Studio was established with a singular vision: to liberate wedding and portrait photography from artificial poses and over-processed aesthetics, returning to authentic light, quiet connections, and enduring heritage.
+              Founded in Bijapur by Rahul, AMP Studio was established with a singular vision: to liberate wedding and portrait photography from artificial poses and over-processed aesthetics, returning to authentic light, quiet connections, and enduring heritage.
             </p>
 
             <p style={{ ...sans }} className="text-base text-[#a0a09a] leading-relaxed font-light">
@@ -337,18 +324,6 @@ export default function FoundersPage() {
         className="w-full h-screen relative overflow-hidden flex flex-col justify-between px-6 lg:px-14 py-8 bg-[#0a0a0a] border-t border-white/10"
       >
         <div className="max-w-7xl w-full mx-auto h-full flex flex-col justify-between">
-          {/* Header */}
-          <div className="flex justify-between items-center py-2 border-b border-white/10">
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-[#ffc800] animate-pulse" />
-              <span style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase">
-                SCROLLABLE CINEMATIC SEQUENCE
-              </span>
-            </div>
-            <div style={{ ...mono }} className="text-xs text-white/40 tracking-widest uppercase">
-              FRAME {String(currentFrameNum).padStart(3, "0")} / 108
-            </div>
-          </div>
 
           {/* Center Canvas Viewfinder */}
           <div className="grid md:grid-cols-12 gap-8 items-center flex-1 my-auto">
@@ -364,7 +339,7 @@ export default function FoundersPage() {
                 style={{ opacity: framesLoaded ? 0 : 1 }}
               />
               <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center z-20 text-[0.65rem] font-mono text-white/70 bg-black/60 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10 pointer-events-none">
-                <span>AMP Studio · Rahul Motion Story</span>
+                <span>AMP Studio</span>
                 <span className="text-[#ffc800]">Scroll down to scrub frames ↓</span>
               </div>
             </div>
