@@ -48,38 +48,52 @@ function SectionTag({ num, label }: { num: string; label: string }) {
 const services = [
   {
     num: "01",
-    name: "Weddings & Elopements",
-    desc: "Full-day and half-day wedding photography and videography in Bijapur and North Karnataka for haldi, mehendi, mandap rituals, baraat, and receptions, shot candidly as they happen.",
-    img: "photo-1606800052052-a08af7148866",
-    alt: "Wedding photography in Bijapur, Karnataka",
+    name: "Maternity",
+    desc: "Graceful and intimate maternity sessions celebrating motherhood in natural light, shot in-studio or at home across Bijapur.",
+    img: "photo-1476703993599-0035a21b17a9",
+    alt: "Maternity photography session in Bijapur",
   },
   {
     num: "02",
-    name: "Couples & Engagements",
-    desc: "Pre-wedding and engagement shoots at locations around Bijapur including Gol Gumbaz, Ibrahim Rauza, Bara Kaman, or anywhere meaningful to you.",
+    name: "Pre Wedding",
+    desc: "Romantic, cinematic pre-wedding shoots around Bijapur heritage marvels including Gol Gumbaz, Ibrahim Rauza, and Bara Kaman.",
     img: "photo-1519225421980-715cb0215aed",
-    alt: "Engagement and pre-wedding photography in Bijapur",
+    alt: "Pre wedding photography in Bijapur",
   },
   {
     num: "03",
-    name: "Family Portraits",
-    desc: "Family portrait sessions at home or outdoors for families across Bijapur and Vijayapura district.",
-    img: "photo-1555252333-9f8e92e65df9",
-    alt: "Family portrait photography in Bijapur",
+    name: "Wedding",
+    desc: "Comprehensive wedding photography and videography for haldi, mehendi, sangeet, sacred mandap ceremonies, and grand receptions across North Karnataka.",
+    img: "photo-1520854221256-17451cc331bf",
+    alt: "Wedding photography in Bijapur, Karnataka",
   },
   {
     num: "04",
-    name: "Maternity",
-    desc: "Natural maternity photography for expecting parents in Bijapur, in-studio or at home, scheduled around your due date.",
-    img: "photo-1476703993599-0035a21b17a9",
-    alt: "Maternity photography in Bijapur",
+    name: "Occasions",
+    desc: "Documenting birthdays, anniversaries, naming ceremonies, housewarmings, and festive family celebrations with candid realism.",
+    img: "photo-1511795409834-ef04bbd61622",
+    alt: "Occasions and celebrations photography in Bijapur",
   },
   {
     num: "05",
-    name: "Portrait Sessions",
-    desc: "Individual portrait sessions in natural light for professionals, students, and creators across Bijapur.",
+    name: "Candid Portraits",
+    desc: "Unposed, authentic personal, creative, and family portraits captured with honest light and timeless character.",
     img: "photo-1531746020798-e6953c6e8e04",
-    alt: "Portrait photography session in Bijapur",
+    alt: "Candid portrait photography in Bijapur",
+  },
+  {
+    num: "06",
+    name: "Designing / Editing",
+    desc: "Bespoke handcrafted photobook album design, high-end editorial retouching, color grading, and cinematic video post-production.",
+    img: "photo-1542744094-3a31727201eb",
+    alt: "Album designing and professional photo editing",
+  },
+  {
+    num: "07",
+    name: "New Borns",
+    desc: "Delicate and patient newborn photography sessions prioritizing baby comfort, gentle natural lighting, and heirloom keepsakes.",
+    img: "photo-1555252333-9f8e92e65df9",
+    alt: "Newborn baby photography in Bijapur",
   },
 ];
 
@@ -121,13 +135,55 @@ const driftWallImages = [
 }));
 
 const galleryItems: ShelfItem[] = [
-  { num: "01", title: "Couples", meta: "2025", image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=900&q=85&fit=crop&auto=format" },
-  { num: "02", title: "Weddings", meta: "2025", image: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=900&q=85&fit=crop&auto=format" },
-  { num: "03", title: "Engagements", meta: "2025", image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=900&q=85&fit=crop&auto=format" },
-  { num: "04", title: "Maternity", meta: "2024", image: "https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=900&q=85&fit=crop&auto=format" },
-  { num: "05", title: "Portrait", meta: "2025", image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=900&q=85&fit=crop&auto=format" },
-  { num: "06", title: "Weddings", meta: "2024", image: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=900&q=85&fit=crop&auto=format" },
-  { num: "07", title: "Couples", meta: "2024", image: "https://images.unsplash.com/photo-1529636798458-92182e662485?w=900&q=85&fit=crop&auto=format" },
+  {
+    num: "01",
+    title: "Maternity",
+    meta: "2025",
+    image: "https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=900&q=85&fit=crop&auto=format",
+    desc: "Intimate and serene maternity albums celebrating the beauty of expecting parents in natural light.",
+  },
+  {
+    num: "02",
+    title: "Pre Wedding",
+    meta: "2025",
+    image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=900&q=85&fit=crop&auto=format",
+    desc: "Cinematic romantic pre-wedding stories documented across Bijapur's architectural marvels and golden sunsets.",
+  },
+  {
+    num: "03",
+    title: "Wedding",
+    meta: "2025",
+    image: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=900&q=85&fit=crop&auto=format",
+    desc: "Heirloom wedding collections capturing the sacred vows, laughter, tears, and vibrant North Karnataka festivities.",
+  },
+  {
+    num: "04",
+    title: "Occasions",
+    meta: "2025",
+    image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=900&q=85&fit=crop&auto=format",
+    desc: "Joyous milestone celebrations, anniversaries, cradle ceremonies, and cultural gatherings preserved forever.",
+  },
+  {
+    num: "05",
+    title: "Candid Portraits",
+    meta: "2025",
+    image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=900&q=85&fit=crop&auto=format",
+    desc: "Raw, expressive candid portraits illuminating genuine personalities and honest human emotion.",
+  },
+  {
+    num: "06",
+    title: "Designing / Editing",
+    meta: "2025",
+    image: "https://images.unsplash.com/photo-1542744094-3a31727201eb?w=900&q=85&fit=crop&auto=format",
+    desc: "Signature custom-bound photobooks, artisanal layouts, precision color-correction, and cinematic film cuts.",
+  },
+  {
+    num: "07",
+    title: "New Borns",
+    meta: "2025",
+    image: "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=900&q=85&fit=crop&auto=format",
+    desc: "Tender, peaceful portraits of your newborn's earliest days, wrapped in warmth and timeless simplicity.",
+  },
 ];
 
 const testimonials = [
@@ -772,7 +828,8 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
             )
           ))}
           <a
-            href="tel:+919686810436"
+            href="#contact"
+            onClick={(e) => handleAnchorClick(e, "#contact")}
             style={{ ...mono, fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase", color: WHITE, textDecoration: "none", border: `1px solid #2a2a2a`, padding: "0.45rem 1.1rem", transition: "background 0.2s, color 0.2s" }}
             onMouseEnter={(e) => { (e.target as HTMLElement).style.background = WHITE; (e.target as HTMLElement).style.color = BG; }}
             onMouseLeave={(e) => { (e.target as HTMLElement).style.background = "transparent"; (e.target as HTMLElement).style.color = WHITE; }}
@@ -885,15 +942,15 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
           </p>
 
           <div className="flex gap-5 mt-10 items-center">
-            <a
-              href="tel:+919686810436"
+            <Link
+              href="/contact"
               className="gsap-hero-btn"
               style={{ background: GOLD, color: BG, fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.2em", padding: "0.8rem 1.6rem", textDecoration: "none", fontWeight: 500, transition: "background 0.2s" }}
               onMouseEnter={(e) => ((e.target as HTMLElement).style.background = "#e6b400")}
               onMouseLeave={(e) => ((e.target as HTMLElement).style.background = GOLD)}
             >
               Book a Session
-            </a>
+            </Link>
             <a
               href="#work"
               onClick={(e) => handleAnchorClick(e, "#work")}
@@ -1066,7 +1123,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
               <em style={{ ...script, color: GOLD }}>Work</em>
             </h2>
             <p className="text-sm md:text-base leading-relaxed" style={{ color: MUTED }}>
-              Photos from weddings, engagements, maternity, and family sessions across Bijapur and North Karnataka.
+              Albums spanning Maternity, Pre Wedding, Wedding, Occasions, Candid Portraits, Designing / Editing, and New Borns across North Karnataka.
             </p>
           </div>
 
@@ -1090,7 +1147,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
               <em style={{ ...script, color: GOLD }}>We Offer</em>
             </h2>
             <p className="text-sm md:text-base leading-relaxed max-w-xl" style={{ color: MUTED }}>
-              Wedding, event, maternity, and portrait photography in Bijapur, covering full-day weddings, engagement shoots, and family sessions.
+              Bespoke photography, videography, and handcrafted album designing across Bijapur and North Karnataka.
             </p>
           </div>
 
@@ -1232,21 +1289,21 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
             <span style={{ color: MUTED }}>your Bijapur photo session?</span>
           </h2>
           <div className="flex gap-5 justify-center items-center">
-            <a
-              href="tel:+919686810436"
+            <Link
+              href="/contact"
               style={{ background: GOLD, color: BG, fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.2em", padding: "0.9rem 2rem", textDecoration: "none", fontWeight: 500, transition: "background 0.2s" }}
               onMouseEnter={(e) => ((e.target as HTMLElement).style.background = "#e6b400")}
               onMouseLeave={(e) => ((e.target as HTMLElement).style.background = GOLD)}
             >
               Book a Session
-            </a>
+            </Link>
           </div>
         </div>
 
         {/* Marquee */}
         <div className="mt-24 overflow-hidden" style={{ borderTop: `1px solid ${BORDER}`, paddingTop: "1.5rem" }}>
           <div className="animate-marquee inline-block whitespace-nowrap">
-            {["Weddings", "Couples", "Portraits", "Maternity", "Family", "Elopements", "Editorial", "Weddings", "Couples", "Portraits", "Maternity", "Family", "Elopements", "Editorial"].map((s, i) => (
+            {["Maternity", "Pre Wedding", "Wedding", "Occasions", "Candid Portraits", "Designing / Editing", "New Borns", "Maternity", "Pre Wedding", "Wedding", "Occasions", "Candid Portraits", "Designing / Editing", "New Borns"].map((s, i) => (
               <span key={i} style={{ ...serif, fontSize: "1.5rem", fontWeight: 300, fontStyle: "italic", color: BORDER, padding: "0 2rem" }}>
                 {s} ·
               </span>

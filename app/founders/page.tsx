@@ -248,7 +248,7 @@ export default function FoundersPage() {
         </div>
 
         <Link
-          href="/#contact"
+          href="/contact"
           style={{ ...mono }}
           className="text-xs uppercase tracking-widest px-4 py-2 border border-white/20 bg-white/5 hover:bg-white text-white hover:text-black transition-all"
         >
