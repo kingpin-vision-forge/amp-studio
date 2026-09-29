@@ -167,12 +167,21 @@ export default function FoundersPage() {
     };
   }, []);
 
-  // Initial canvas render
+  // Initial canvas render & resize redraw
   useEffect(() => {
     if (framesLoaded) {
       drawCanvasFrame(0);
+      ScrollTrigger.refresh();
     }
   }, [framesLoaded]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      drawCanvasFrame(lastFrameRef.current);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Cursor followers
   useEffect(() => {
@@ -256,24 +265,85 @@ export default function FoundersPage() {
         </Link>
       </header>
 
-      {/* Hero: Amma Mahadevi Lead Photographer Showcase */}
-      <section className="pt-36 pb-20 px-6 lg:px-14 max-w-7xl mx-auto">
+      {/* 1. Founder & Lead Cinematographer: Rahul (Above) */}
+      <section
+        id="founders-sequence"
+        className="w-full relative px-6 lg:px-14 pt-36 pb-24 md:pb-28 bg-[#0a0a0a]"
+      >
+        <div className="max-w-7xl w-full mx-auto">
+          <div className="grid md:grid-cols-12 gap-12 lg:gap-16 items-center">
+            {/* Left: Rahul Shutter Canvas Card (3:4 portrait rectangle) */}
+            <div className="md:col-span-5 relative">
+              <div className="aspect-[3/4] w-full rounded-2xl overflow-hidden border border-white/15 bg-[#121212] shadow-2xl relative group">
+                <canvas
+                  ref={canvasRef}
+                  className="w-full h-full object-cover relative z-10"
+                />
+                <img
+                  src="/amp-rahul-pics/frame-001.jpg"
+                  alt="Rahul - Founder & Creative Director at AMP Studio"
+                  className="absolute inset-0 w-full h-full object-cover transition-opacity duration-150"
+                  style={{ opacity: framesLoaded ? 0 : 1 }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none z-20" />
 
-        <div className="grid md:grid-cols-12 gap-12 items-center">
+                <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end z-30">
+                  <div>
+                    <h3 style={{ ...serif }} className="text-2xl text-white font-light">
+                      Rahul
+                    </h3>
+                    <p style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase mt-0.5">
+                      Founder & Creative Director
+                    </p>
+                  </div>
+                  <div style={{ ...mono }} className="text-[0.65rem] text-white/50 tracking-widest uppercase">
+                    Bijapur, KA
+                  </div>
+                </div>
+              </div>
+
+              {/* Decorative Gold Frame accent */}
+              <div className="absolute -bottom-3 -right-3 w-full h-full rounded-2xl border border-[#ffc800]/20 -z-10 pointer-events-none" />
+            </div>
+
+            {/* Right: Sequence Story description */}
+            <div className="md:col-span-7 flex flex-col justify-center space-y-6">
+              <div className="flex items-center gap-2">
+                <span style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase">
+                  Founder & Visionary
+                </span>
+              </div>
+              <h2 style={{ ...serif }} className="text-4xl lg:text-5xl text-white font-light leading-tight">
+                Preserving Life in <span style={{ ...script, color: GOLD }} className="text-5xl lg:text-7xl">Continuous</span> Motion
+              </h2>
+              <p style={{ ...sans }} className="text-base text-[#a0a09a] leading-relaxed font-light">
+                Founded in Bijapur by Rahul, AMP Studio was established with a singular vision: to liberate wedding and portrait photography from artificial poses and over-processed aesthetics, returning to authentic light, quiet connections, and enduring heritage.
+              </p>
+              <p style={{ ...sans }} className="text-base text-[#a0a09a] leading-relaxed font-light">
+                By capturing continuous cinema-grade shutter sequences, Rahul isolates genuine laughter, subtle glances, and the raw emotion of North Karnataka traditions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. Co-Founder & Lead Photographer: Amma Mahadevi (Below) */}
+      <section className="py-24 md:py-28 px-6 lg:px-14 max-w-7xl mx-auto border-t border-white/10">
+        <div className="grid md:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Left: Lead Photographer Portrait Image */}
           <div className="md:col-span-5 relative">
-            <div className="aspect-[4/5] rounded-2xl overflow-hidden border border-white/15 bg-[#121212] shadow-2xl relative group">
+            <div className="aspect-[3/4] w-full rounded-2xl overflow-hidden border border-white/15 bg-[#121212] shadow-2xl relative group">
               <img
                 src="/amma-mahadevi-about.jpg"
-                alt="Amma Mahadevi - Founder & Lead Photographer at AMP Studio"
+                alt="Principal Artist at AMP Studio"
                 className="w-full h-full object-cover object-top filter contrast-[1.04] transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none z-20" />
 
-              <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+              <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end z-30">
                 <div>
-                  <p style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase mt-1">
-                    Founder & Principal Artist
+                  <p style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase mt-0.5">
+                    Principal Artist
                   </p>
                 </div>
                 <div style={{ ...mono }} className="text-[0.65rem] text-white/50 tracking-widest uppercase">
@@ -288,85 +358,57 @@ export default function FoundersPage() {
 
           {/* Right: Founder Story & Narrative */}
           <div className="md:col-span-7 flex flex-col justify-center space-y-6">
-            <h2 style={{ ...serif }} className="text-4xl lg:text-6xl text-white font-light leading-tight">
+            <div className="flex items-center gap-2">
+              <span style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase">
+                Co-Founder & Principal Artist
+              </span>
+            </div>
+
+            <h2 style={{ ...serif }} className="text-4xl lg:text-5xl text-white font-light leading-tight">
               Honoring Life’s Moments Through <em style={{ ...script }} className="text-[#ffc800] text-5xl lg:text-7xl">Candid</em> Realism
             </h2>
-
-            <p style={{ ...sans }} className="text-base text-[#a0a09a] leading-relaxed font-light">
-              Founded in Bijapur by Rahul, AMP Studio was established with a singular vision: to liberate wedding and portrait photography from artificial poses and over-processed aesthetics, returning to authentic light, quiet connections, and enduring heritage.
-            </p>
 
             <p style={{ ...sans }} className="text-base text-[#a0a09a] leading-relaxed font-light">
               Over the course of 8+ years across Vijayapura district and North Karnataka, Amma has documented over 11,467 heartfelt sessions—from sacred sunrise rituals around the Gol Gumbaz and Bara Kaman to vibrant wedding celebrations.
             </p>
 
-            <div className="grid grid-cols-3 gap-6 pt-6 border-t border-white/10">
-              <div>
-                <div style={{ ...serif }} className="text-3xl text-white font-light">11,467+</div>
-                <div style={{ ...mono }} className="text-[0.65rem] text-white/50 uppercase tracking-widest mt-1">Sessions Completed</div>
+            <p style={{ ...sans }} className="text-base text-[#a0a09a] leading-relaxed font-light">
+              Her intuitive eye for emotional depth and quiet authenticity shapes AMP Studio’s photographic signature, preserving memories that feel as genuine decades later as they did in the moment.
+            </p>
+
+            {/* Stats Block: Baseline aligned */}
+            <div className="grid grid-cols-3 gap-6 pt-6 border-t border-white/10 items-end">
+              <div className="flex flex-col justify-end">
+                <div className="h-10 flex items-end">
+                  <div style={{ ...serif }} className="text-3xl text-white font-light leading-none">11,467+</div>
+                </div>
+                <div style={{ ...mono }} className="text-[0.65rem] text-white/50 uppercase tracking-widest mt-2">Sessions Completed</div>
               </div>
-              <div>
-                <div style={{ ...mono }} className="text-2xl text-[#ffc800] font-medium tracking-widest">★★★★★</div>
-                <div style={{ ...mono }} className="text-[0.65rem] text-white/50 uppercase tracking-widest mt-1">5-Star Client Rating</div>
+              <div className="flex flex-col justify-end">
+                <div className="h-10 flex items-end pb-0.5">
+                  <div
+                    style={{
+                      ...mono,
+                      fontSize: "1.7rem",
+                      fontWeight: 500,
+                      lineHeight: 1,
+                      color: GOLD,
+                      letterSpacing: "0.14em",
+                      textShadow: "0 0 16px rgba(255,200,0,0.5)",
+                    }}
+                  >
+                    ★★★★★
+                  </div>
+                </div>
+                <div style={{ ...mono }} className="text-[0.65rem] text-white/50 uppercase tracking-widest mt-2">5-Star Client Rating</div>
               </div>
-              <div>
-                <div style={{ ...serif }} className="text-3xl text-white font-light">8+ yrs</div>
-                <div style={{ ...mono }} className="text-[0.65rem] text-white/50 uppercase tracking-widest mt-1">Artistic Heritage</div>
+              <div className="flex flex-col justify-end">
+                <div className="h-10 flex items-end">
+                  <div style={{ ...serif }} className="text-3xl text-white font-light leading-none">8+ yrs</div>
+                </div>
+                <div style={{ ...mono }} className="text-[0.65rem] text-white/50 uppercase tracking-widest mt-2">Artistic Heritage</div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pinned Scrollable Cinematic Frame Showcase Section */}
-      <section
-        id="founders-sequence"
-        className="w-full h-screen relative overflow-hidden flex flex-col justify-between px-6 lg:px-14 py-8 bg-[#0a0a0a] border-t border-white/10"
-      >
-        <div className="max-w-7xl w-full mx-auto h-full flex flex-col justify-between">
-
-          {/* Center Canvas Viewfinder */}
-          <div className="grid md:grid-cols-12 gap-8 items-center flex-1 my-auto">
-            <div className="md:col-span-8 h-[65vh] md:h-[75vh] relative rounded-2xl overflow-hidden border border-white/15 bg-black shadow-2xl flex items-center justify-center p-1">
-              <canvas
-                ref={canvasRef}
-                className="w-full h-full object-contain relative z-10"
-              />
-              <img
-                src="/amp-rahul-pics/frame-001.jpg"
-                alt="Frame sequence fallback"
-                className="absolute inset-0 w-full h-full object-cover transition-opacity duration-150"
-                style={{ opacity: framesLoaded ? 0 : 1 }}
-              />
-              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center z-20 text-[0.65rem] font-mono text-white/70 bg-black/60 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10 pointer-events-none">
-                <span>AMP Studio</span>
-                <span className="text-[#ffc800]">Scroll down to scrub frames ↓</span>
-              </div>
-            </div>
-
-            {/* Sequence Story description */}
-            <div className="md:col-span-4 flex flex-col justify-center space-y-5 pl-0 md:pl-6">
-              <span style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase">
-                Continuous Motion Narrative
-              </span>
-              <h3 style={{ ...serif }} className="text-3xl lg:text-4xl text-white font-light leading-snug">
-                Every movement, <br />
-                preserved in <br />
-                <span style={{ ...script, color: GOLD }} className="text-5xl">108 pristine frames.</span>
-              </h3>
-              <p style={{ ...sans }} className="text-sm text-[#888882] leading-relaxed">
-                By capturing continuous cinema-grade shutter sequences, our lead photographers isolate genuine laughter, subtle glances, and the authentic energy of the occasion.
-              </p>
-              <div style={{ ...mono }} className="text-[0.7rem] text-white/40 tracking-widest uppercase pt-4 border-t border-white/10">
-                SCROLL TO ADVANCE SEQUENCE
-              </div>
-            </div>
-          </div>
-
-          {/* Viewfinder Footer */}
-          <div className="flex justify-between items-center text-[0.65rem] font-mono text-white/30 tracking-widest uppercase pt-2">
-            <span>AMP STUDIO · BIJAPUR FOUNDERS</span>
-            <span>SHUTTER TIMELINE 108 FPS</span>
           </div>
         </div>
       </section>
@@ -375,7 +417,7 @@ export default function FoundersPage() {
       <section className="py-24 px-6 lg:px-14 border-t border-white/10 bg-[#0f0f0f] text-center">
         <div className="max-w-3xl mx-auto space-y-6">
           <span style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase">
-            Work With Amma Mahadevi & The Team
+            Work With Rahul, Amma & The Team
           </span>
           <h2 style={{ ...serif }} className="text-4xl md:text-5xl text-white font-light">
             Ready to plan your next chapter in Bijapur?
@@ -385,7 +427,7 @@ export default function FoundersPage() {
           </p>
           <div className="pt-4 flex justify-center gap-4">
             <Link
-              href="/#contact"
+              href="/contact"
               style={{ ...mono }}
               className="px-8 py-3 rounded-full bg-[#ffc800] text-black font-medium text-xs uppercase tracking-widest hover:bg-[#e6b400] transition-colors"
             >

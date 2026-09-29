@@ -52,3 +52,25 @@ This project uses **Tailwind CSS v4** through the `@tailwindcss/postcss` PostCSS
 - Use double quotes for strings containing apostrophes (`"We're here to help"`), or escape them in single-quoted strings. An unescaped apostrophe in a single-quoted string breaks the build.
 - Ensure JSX tags are closed and braces are balanced.
 - Export components as default exports.
+
+
+<claude-mem-context>
+# Memory Context
+
+# [AMP] recent context, 2026-09-29 10:23am GMT+5:30
+
+Legend: 🎯session 🔴bugfix 🟣feature 🔄refactor ✅change 🔵discovery ⚖️decision
+Format: ID TIME TYPE TITLE
+Fetch details: get_observations([IDs]) | Search: mem-search skill
+
+Stats: 5 obs (1,888t read) | 40,185t work | 95% savings
+
+### Sep 29, 2026
+1095 10:20a ✅ Home.tsx Alignment Fix Requested
+1096 " 🔵 AMP Project — Home.tsx Structure and Visual System Confirmed
+1098 10:21a 🔵 AMP Home.tsx — About Section and Gallery Structure Confirmed, Detector Clean
+1100 " 🔴 Home.tsx About Stats — Centered Alignment and Responsive Stacking Fixed
+1102 " ✅ Home.tsx Alignment Fix — Production Build Passes Clean
+
+Access 40k tokens of past work via get_observations([IDs]) or mem-search skill.
+</claude-mem-context>

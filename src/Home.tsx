@@ -254,17 +254,15 @@ function ServiceRow({
           <div className="flex items-center gap-3">
             <span
               style={{ ...mono }}
-              className={`text-xs md:text-sm tracking-widest transition-colors duration-300 ${
-                isHovered ? "text-[#ffc800] font-semibold" : "text-[#888882]"
-              }`}
+              className={`text-xs md:text-sm tracking-widest transition-colors duration-300 ${isHovered ? "text-[#ffc800] font-semibold" : "text-[#888882]"
+                }`}
             >
               {svc.num}
             </span>
             <h3
               style={{ ...serif }}
-              className={`text-xl md:text-3xl font-light transition-all duration-300 ${
-                isHovered ? "text-[#ffc800] translate-x-1" : "text-white"
-              }`}
+              className={`text-xl md:text-3xl font-light transition-all duration-300 ${isHovered ? "text-[#ffc800] translate-x-1" : "text-white"
+                }`}
             >
               {svc.name}
             </h3>
@@ -288,11 +286,10 @@ function ServiceRow({
           }}
         >
           <div
-            className={`relative rounded-xl md:rounded-2xl overflow-hidden shadow-xl transition-all duration-500 ease-out border ${
-              isHovered
+            className={`relative rounded-xl md:rounded-2xl overflow-hidden shadow-xl transition-all duration-500 ease-out border ${isHovered
                 ? "w-full md:w-64 h-48 md:h-40 opacity-100 scale-100 border-[#ffc800]/60 shadow-[0_20px_50px_rgba(0,0,0,0.95)]"
                 : "w-36 md:w-36 h-24 md:h-20 opacity-80 border-white/10"
-            }`}
+              }`}
             style={{
               perspective: "1000px",
               transformStyle: "preserve-3d",
@@ -304,9 +301,8 @@ function ServiceRow({
             <img
               src={`https://images.unsplash.com/${svc.img}?w=800&q=85&fit=crop&auto=format`}
               alt={svc.alt}
-              className={`w-full h-full object-cover transition-transform duration-700 ${
-                isHovered ? "scale-110" : "scale-100"
-              }`}
+              className={`w-full h-full object-cover transition-transform duration-700 ${isHovered ? "scale-110" : "scale-100"
+                }`}
             />
             {/* Dark Vignette Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
@@ -360,7 +356,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       } else {
         img.onload = checkComplete;
         if (img.decode) {
-          img.decode().then(checkComplete).catch(() => {});
+          img.decode().then(checkComplete).catch(() => { });
         }
       }
       imgs.push(img);
@@ -1018,7 +1014,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         className="w-full min-h-screen min-h-[100dvh] relative overflow-hidden flex flex-col justify-center px-6 lg:px-14 xl:px-20 py-20 md:py-28"
         style={{ borderTop: `1px solid ${BORDER}`, background: BG_DARK }}
       >
-        <div className="w-full my-auto" style={{ maxWidth: 1480, margin: "0 auto" }}>          
+        <div className="w-full my-auto" style={{ maxWidth: 1480, margin: "0 auto" }}>
           {/* Main Grid: Studio Shop Image on Left, Text + Stats on Right */}
           <div className="grid md:grid-cols-12 gap-10 md:gap-12 lg:gap-16 items-center">
             {/* Studio Workspace / Shop Image */}
@@ -1072,41 +1068,56 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
                 </Link>
               </div>
 
-              {/* About Stats */}
-              <div className="gsap-about-stats grid grid-cols-3 gap-6 md:gap-8 pt-7 border-t border-[#1e1e1e]">
-                <div className="gsap-stat-item">
-                  <div style={{ ...serif, fontSize: "clamp(2.2rem, 3.4vw, 3rem)", fontWeight: 300, lineHeight: 1, color: WHITE }}>
+            </div>
+
+            {/* Full-width stats row */}
+            <div className="gsap-about-stats md:col-span-12 grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-12 mt-2 md:mt-6 pt-8 border-t border-[#1e1e1e] items-end justify-items-center text-center">
+              <div className="gsap-stat-item flex min-w-0 w-full flex-col items-center justify-end">
+                <div className="h-20 flex items-end justify-center">
+                  <div className="tabular-nums" style={{ ...serif, fontSize: "clamp(3rem, 5vw, 4.75rem)", fontWeight: 300, lineHeight: 0.9, color: WHITE }}>
                     {stat1.toLocaleString()}+
                   </div>
-                  <div style={{ ...mono, fontSize: "0.68rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>
-                    Sessions completed
-                  </div>
                 </div>
-                <div className="gsap-stat-item">
+                <div className="whitespace-nowrap" style={{ ...mono, fontSize: "clamp(0.58rem, 0.8vw, 0.68rem)", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "1rem" }}>
+                  Sessions completed
+                </div>
+              </div>
+
+              <div className="gsap-stat-item flex min-w-0 w-full flex-col items-center justify-end">
+                <div className="h-20 flex items-end justify-center">
                   <div
+                    role="img"
+                    aria-label="5 out of 5 stars"
+                    className="flex items-center justify-center gap-[0.1em]"
                     style={{
                       ...mono,
-                      fontSize: "clamp(1.6rem, 2.4vw, 2.2rem)",
+                      fontSize: "clamp(3rem, 4.6vw, 4.75rem)",
                       fontWeight: 500,
-                      lineHeight: 1,
+                      lineHeight: 0.9,
                       color: GOLD,
-                      letterSpacing: "0.2em",
-                      textShadow: "0 0 16px rgba(255,200,0,0.45)",
+                      textShadow: "0 0 20px rgba(255,200,0,0.55)",
                     }}
                   >
-                    ★★★★★
-                  </div>
-                  <div style={{ ...mono, fontSize: "0.68rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>
-                    5-Star Client Rating
+                    {Array.from({ length: 5 }, (_, index) => (
+                      <span key={index} aria-hidden="true">
+                        ★
+                      </span>
+                    ))}
                   </div>
                 </div>
-                <div className="gsap-stat-item">
-                  <div style={{ ...serif, fontSize: "clamp(2.2rem, 3.4vw, 3rem)", fontWeight: 300, lineHeight: 1, color: WHITE }}>
+                <div className="whitespace-nowrap" style={{ ...mono, fontSize: "clamp(0.58rem, 0.8vw, 0.68rem)", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "1rem" }}>
+                  5-Star Client Rating
+                </div>
+              </div>
+
+              <div className="gsap-stat-item flex min-w-0 w-full flex-col items-center justify-end">
+                <div className="h-20 flex items-end justify-center">
+                  <div className="tabular-nums" style={{ ...serif, fontSize: "clamp(3rem, 5vw, 4.75rem)", fontWeight: 300, lineHeight: 0.9, color: WHITE }}>
                     {stat2} yrs
                   </div>
-                  <div style={{ ...mono, fontSize: "0.68rem", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "0.5rem" }}>
-                    Photography experience
-                  </div>
+                </div>
+                <div className="whitespace-nowrap" style={{ ...mono, fontSize: "clamp(0.58rem, 0.8vw, 0.68rem)", textTransform: "uppercase", letterSpacing: "0.15em", color: MUTED, marginTop: "1rem" }}>
+                  Photography experience
                 </div>
               </div>
             </div>
