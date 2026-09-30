@@ -115,3 +115,41 @@ html.lenis, html.lenis body {
 .pause-on-hover:hover .animate-slide-shelf {
   animation-play-state: paused;
 }
+
+/* 3D Coverflow Scroll Gallery (Kingpin Vision Forge style) */
+.work-track.coverflow-active {
+  perspective: 1400px;
+  height: 60vh;
+  min-height: 480px;
+  padding: 0;
+  display: block;
+  position: relative;
+  overflow: visible;
+}
+
+.coverflow-active .work-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.work-card {
+  --active: 0;
+  border: 1px solid rgba(255, 200, 0, 0.16);
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.65);
+}
+
+.work-card:after {
+  content: "";
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: var(--active);
+  border: 1px solid rgba(255, 200, 0, 0.5);
+  transition: opacity 0.2s linear;
+  position: absolute;
+  inset: 0;
+  box-shadow: 0 0 28px rgba(255, 200, 0, 0.25), 0 0 65px rgba(255, 200, 0, 0.12);
+}

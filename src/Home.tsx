@@ -7,7 +7,7 @@ import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import DriftWall, { type DriftWallItem } from "./DriftWall";
-import PhotoShelf, { type ShelfItem } from "./PhotoShelf";
+import SelectedWork, { type WorkGalleryItem } from "./SelectedWork";
 import PhotoModal, { type PhotoModalItem } from "./PhotoModal";
 import LegalModal, { type LegalTab } from "./LegalModal";
 
@@ -134,72 +134,118 @@ const driftWallImages = [
   title: label,
 }));
 
-const galleryItems: ShelfItem[] = [
+const galleryItems: WorkGalleryItem[] = [
   {
     num: "01",
     title: "Maternity",
+    category: "Studio Album · 2025",
     meta: "2025",
     image: "https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=900&q=85&fit=crop&auto=format",
     desc: "Intimate and serene maternity albums celebrating the beauty of expecting parents in natural light.",
+    tags: ["Natural Light", "Fine Art", "Studio Portraits"],
+    location: "Bijapur, Karnataka",
   },
   {
     num: "02",
     title: "Pre Wedding",
+    category: "Cinematic Film · 2025",
     meta: "2025",
     image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=900&q=85&fit=crop&auto=format",
     desc: "Cinematic romantic pre-wedding stories documented across Bijapur's architectural marvels and golden sunsets.",
+    tags: ["Heritage Locations", "Drone 4K", "Cinematic Film"],
+    location: "Gol Gumbaz & Bijapur",
   },
   {
     num: "03",
     title: "Wedding",
+    category: "Sacred Ceremonies · 2025",
     meta: "2025",
     image: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=900&q=85&fit=crop&auto=format",
     desc: "Heirloom wedding collections capturing the sacred vows, laughter, tears, and vibrant North Karnataka festivities.",
+    tags: ["Heirloom Album", "Muhurtham", "Traditional Rituals"],
+    location: "Vijayapura Mandapam",
   },
   {
     num: "04",
     title: "Occasions",
+    category: "Family Milestones · 2025",
     meta: "2025",
     image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=900&q=85&fit=crop&auto=format",
     desc: "Joyous milestone celebrations, anniversaries, cradle ceremonies, and cultural gatherings preserved forever.",
+    tags: ["Anniversaries", "Cradle Ceremony", "Festivities"],
+    location: "Bijapur, Karnataka",
   },
   {
     num: "05",
     title: "Candid Portraits",
+    category: "Signature Series · 2025",
     meta: "2025",
     image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=900&q=85&fit=crop&auto=format",
     desc: "Raw, expressive candid portraits illuminating genuine personalities and honest human emotion.",
+    tags: ["Editorial", "Ambient Light", "Black & White"],
+    location: "AMP Studio, Bijapur",
   },
   {
     num: "06",
     title: "Designing / Editing",
+    category: "Post-Production · 2025",
     meta: "2025",
     image: "https://images.unsplash.com/photo-1542744094-3a31727201eb?w=900&q=85&fit=crop&auto=format",
     desc: "Signature custom-bound photobooks, artisanal layouts, precision color-correction, and cinematic film cuts.",
+    tags: ["Custom Binding", "Color Grading", "Handcrafted Layouts"],
+    location: "Design Suite",
   },
   {
     num: "07",
     title: "New Borns",
+    category: "Gentle Memories · 2025",
     meta: "2025",
     image: "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=900&q=85&fit=crop&auto=format",
     desc: "Tender, peaceful portraits of your newborn's earliest days, wrapped in warmth and timeless simplicity.",
+    tags: ["Studio Setup", "Gentle Light", "Keepsake Frames"],
+    location: "AMP Baby Studio",
   },
 ];
 
-const testimonials = [
+const testimonials: {
+  stars: string;
+  text: string;
+  name: string;
+  meta: string;
+  avatar?: string;
+}[] = [
   {
     stars: "★★★★★",
-    text: `"AMP Studio made the entire shoot relaxed and simple. Our engagement photos around Gol Gumbaz turned out clear, natural, and candid."`,
-    name: "Priya & Rahul",
-    meta: "Couples Session · Bijapur · 2025",
-    avatar: "photo-1438761681033-6461ffad8d80",
+    text: "Highly recommended! I got my brother's birthday photo frame designed by Amma Mahadevi Photography Studio, and it turned out absolutely amazing. The design, photo editing, print quality, and frame finish were all excellent. They were very patient with my requests and delivered exactly what I wanted. My brother loved the gift! Thank you for the beautiful work and great service. I'll definitely come back again.",
+    name: "Sudeep Kadam",
+    meta: "Google Review",
+    avatar: "/reviews/reviewer-1.png",
   },
   {
     stars: "★★★★★",
-    text: `"We booked AMP Studio for our maternity session and are very happy with the results. They were patient and easy to work with throughout."`,
-    name: "Ankita R.",
-    meta: "Maternity Session · Bijapur · 2025",
-    avatar: "photo-1494790108377-be9c29b29330",
+    text: "Absolutely loved the photography for our ring ceremony! Every special moment was captured so beautifully and naturally. The pictures are full of emotions, details, and memories we'll cherish forever. The team was professional, creative, and made us feel comfortable throughout the event. Highly recommended for anyone who wants their special day captured perfectly!",
+    name: "Sachin Sanadi",
+    meta: "Google Review",
+    avatar: "/reviews/reviewer-2.png",
+  },
+  {
+    stars: "★★★★★",
+    text: "One of the best photo studio in Vijayapura. Thank you so much for the all photos. They arrived on time, maintained a friendly and approachable demeanor, made us feel ease throughout the session.",
+    name: "Deepa S",
+    meta: "Google Review",
+  },
+  {
+    stars: "★★★★★",
+    text: "I just explained how my kid photoshoot. They have taken care everything with proper all poses and emotions were captured.",
+    name: "Saddam Bavakhan",
+    meta: "Local Guide · Google Review",
+  },
+  {
+    stars: "★★★★★",
+    text: "Absolutely loved my experience with Amma Mahadevi Photography! Their service, staff, atmosphere, and speed were all excellent, and the product quality for the price was outstanding.",
+    name: "Sachin Kulkarni",
+    meta: "Local Guide · Google Review",
+    avatar: "/reviews/reviewer-3.png",
   },
 ];
 
@@ -587,37 +633,8 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         ease: "power3.out",
       });
 
-      // 4. Work / Gallery Section
-      gsap.fromTo(".gsap-work-header", { y: 30, opacity: 0 }, {
-        scrollTrigger: { trigger: "#work", start: "top 95%" },
-        y: 0, opacity: 1, duration: 0.8, ease: "power3.out", clearProps: "transform,opacity"
-      });
-
-      gsap.from(".gsap-gallery-item", {
-        scrollTrigger: {
-          trigger: ".gsap-gallery-grid",
-          start: "top 80%",
-        },
-        y: 60,
-        opacity: 0,
-        duration: 0.9,
-        stagger: 0.1,
-        ease: "power3.out",
-      });
-
-      // Parallax effect on gallery images
-      gsap.utils.toArray<HTMLElement>(".gsap-gallery-img").forEach((img) => {
-        gsap.to(img, {
-          scrollTrigger: {
-            trigger: img.parentElement,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1,
-          },
-          y: -25,
-          ease: "none",
-        });
-      });
+      // 4. Work Section ScrollTrigger refresh
+      ScrollTrigger.refresh();
 
       // 5. Services Section (Guaranteed Visible)
       gsap.fromTo(
@@ -1125,28 +1142,11 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         </div>
       </section>
 
-      {/* Gallery */}
-      <section id="work" className="relative overflow-hidden w-full" style={{ padding: "5rem 1.5rem 6rem" }}>
-        <div style={{ maxWidth: 1400, margin: "0 auto" }}>
-          <div className="gsap-work-header flex flex-col gap-3 mb-10 max-w-2xl">
-            <h2 style={{ ...serif, fontWeight: 300, fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", letterSpacing: "-0.025em", lineHeight: 1.1, color: WHITE }} className="whitespace-nowrap flex items-baseline gap-3">
-              <span>Recent</span>
-              <em style={{ ...script, color: GOLD }}>Work</em>
-            </h2>
-            <p className="text-sm md:text-base leading-relaxed" style={{ color: MUTED }}>
-              Albums spanning Maternity, Pre Wedding, Wedding, Occasions, Candid Portraits, Designing / Editing, and New Borns across North Karnataka.
-            </p>
-          </div>
-
-          {/* Interactive photo shelf: continuous sliding 3D books, pause on hover, click to explore */}
-          <div className="gsap-gallery-grid">
-            <PhotoShelf
-              items={galleryItems}
-              onPhotoClick={(item) => setSelectedPhoto(item)}
-            />
-          </div>
-        </div>
-      </section>
+      {/* Selected Work Gallery (Side scrolling on scroll down matching kingpinvisionforge.com) */}
+      <SelectedWork
+        items={galleryItems}
+        onPhotoClick={(item) => setSelectedPhoto(item)}
+      />
 
       {/* Services */}
       <section id="services" style={{ background: BG_DARK, borderTop: `1px solid ${BORDER}`, padding: "6rem 1.5rem" }}>
@@ -1208,7 +1208,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
             {testimonials.map((t, i) => (
               <div
                 key={i}
-                className="gsap-review-card"
+                className={`gsap-review-card flex flex-col justify-between${i === testimonials.length - 1 && testimonials.length % 2 === 1 ? " md:col-span-2" : ""}`}
                 style={{ background: CARD, border: `1px solid ${BORDER}`, padding: "2rem", transition: "border-color 0.3s" }}
                 onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = "#2a2a2a")}
                 onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = BORDER)}
@@ -1227,8 +1227,12 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
                 </div>
                 <p style={{ ...serif, fontSize: "1rem", fontStyle: "italic", color: MUTED, lineHeight: 1.75, marginBottom: "1.25rem" }}>{t.text}</p>
                 <div className="flex items-center gap-3">
-                  <div className="rounded-full overflow-hidden flex-shrink-0" style={{ width: 36, height: 36, background: "#2a2a2a" }}>
-                    <img src={`https://images.unsplash.com/${t.avatar}?w=100&q=80&fit=crop&auto=format`} alt={`${t.name}, AMP Studio client`} className="w-full h-full object-cover" style={{ filter: "grayscale(1)" }} />
+                  <div className="rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center" style={{ width: 36, height: 36, background: "#2a2a2a", ...mono, fontSize: "0.8rem", color: GOLD }}>
+                    {t.avatar ? (
+                      <img src={t.avatar} alt={`${t.name}, AMP Studio client`} className="w-full h-full object-cover" />
+                    ) : (
+                      t.name.charAt(0)
+                    )}
                   </div>
                   <div>
                     <div style={{ fontSize: "0.8rem", color: WHITE, fontWeight: 300 }}>{t.name}</div>
