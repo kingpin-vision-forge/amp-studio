@@ -308,13 +308,8 @@ export default function FoundersPage() {
 
             {/* Right: Sequence Story description */}
             <div className="md:col-span-7 flex flex-col justify-center space-y-6">
-              <div className="flex items-center gap-2">
-                <span style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase">
-                  About The Founder
-                </span>
-              </div>
               <h2 style={{ ...serif }} className="text-4xl lg:text-5xl text-white font-light leading-tight">
-                About The Founder — <span style={{ ...script, color: GOLD }} className="text-5xl lg:text-7xl">Rahul R Chavan</span>
+                <span style={{ ...script, color: GOLD }} className="text-5xl lg:text-7xl">Rahul R Chavan</span>
               </h2>
               <p style={{ ...mono }} className="text-xs text-[#ffc800] tracking-wider uppercase font-medium">
                 Founder | Amma Mahadevi Photography Studio (AMP STUDIO) | Bijapur
@@ -328,7 +323,7 @@ export default function FoundersPage() {
 
               <div className="space-y-4 text-sm md:text-base text-[#bfbfb8] font-light leading-relaxed" style={{ ...sans }}>
                 <p>
-                  I am <strong className="text-white font-medium">Rahul R Chavan</strong>, founder and lead photographer at <strong className="text-white font-medium">Amma Mahadevi Photography Studio (AMP STUDIO) - Bijapur, Karnataka</strong>. With <strong className="text-[#ffc800] font-medium">8+ years of professional experience</strong> behind the lens, my journey has been driven by one simple belief — every picture should have a purpose and every frame should tell a story.
+                  I am <strong className="text-white font-medium">Rahul R Chavan</strong>, founder and lead photographer at <strong className="text-white font-medium">Amma Mahadevi Photography Studio (AMP STUDIO), Bijapur, Karnataka</strong>. With <strong className="text-[#ffc800] font-medium">8+ years of professional experience</strong> behind the lens, my journey has been driven by one simple belief - every picture should have a purpose and every frame should tell a story.
                 </p>
                 <p>
                   Based in <strong className="text-white font-medium">Vijayapura (Bijapur)</strong>, I have had the privilege of mastering almost every genre of modern photography. What started as a solo passion has now become a studio trusted by hundreds of businesses and families across North Karnataka.
@@ -375,7 +370,7 @@ export default function FoundersPage() {
                   The AMP Philosophy
                 </div>
                 <p style={{ ...sans }} className="text-xs md:text-sm text-[#c8c8c0] leading-relaxed font-light">
-                  To me, photography is not just about the best camera or lighting. It is about understanding your need — whether it is a hospital that wants to look trustworthy, a hotel that wants to look luxurious, a furniture brand that wants to look premium, or a couple who wants to remember their wedding forever.
+                  To me, photography is not just about the best camera or lighting. It is about understanding your need - whether it is a hospital that wants to look trustworthy, a hotel that wants to look luxurious, a furniture brand that wants to look premium, or a couple who wants to remember their wedding forever.
                 </p>
               </div>
 
@@ -386,7 +381,7 @@ export default function FoundersPage() {
                 </p>
                 <div className="pt-2 border-t border-white/10">
                   <div style={{ ...serif }} className="text-xl text-white font-normal italic">
-                    — Rahul R Chavan
+                    - Rahul R Chavan
                   </div>
                   <div style={{ ...mono }} className="text-[0.68rem] text-[#ffc800] tracking-[0.18em] uppercase mt-0.5">
                     Founder, AMP STUDIO Bijapur
@@ -405,7 +400,7 @@ export default function FoundersPage() {
           <div className="md:col-span-5 relative">
             <div className="aspect-[3/4] w-full rounded-2xl overflow-hidden border border-white/15 bg-[#121212] shadow-2xl relative group">
               <img
-                src="/amma-mahadevi-about.jpg"
+                src="/amma-mahadevi-about.avif"
                 alt="Principal Artist at AMP Studio"
                 className="w-full h-full object-cover object-top filter contrast-[1.04] transition-transform duration-700 group-hover:scale-105"
               />
@@ -440,7 +435,7 @@ export default function FoundersPage() {
             </h2>
 
             <p style={{ ...sans }} className="text-base text-[#a0a09a] leading-relaxed font-light">
-              Over the course of 8+ years across Vijayapura district and North Karnataka, Amma has documented over 11,467 heartfelt sessions—from sacred sunrise rituals around the Gol Gumbaz and Bara Kaman to vibrant wedding celebrations.
+              Over the course of 8+ years across Vijayapura district and North Karnataka, Amma has documented over 11,467 heartfelt sessions-from sacred sunrise rituals around the Gol Gumbaz and Bara Kaman to vibrant wedding celebrations.
             </p>
 
             <p style={{ ...sans }} className="text-base text-[#a0a09a] leading-relaxed font-light">

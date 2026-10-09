@@ -13,6 +13,9 @@ export interface WorkGalleryItem {
   desc: string;
   tags: string[];
   location?: string;
+  albumId: string;
+  /** Number of photos in the album, shown on the "View Album" pill */
+  count?: number;
 }
 
 const GOLD = "#ffc800";
@@ -23,10 +26,10 @@ const sans = { fontFamily: "DM Sans, sans-serif" } as const;
 
 export default function SelectedWork({
   items,
-  onPhotoClick,
+  onOpenAlbum,
 }: {
   items: WorkGalleryItem[];
-  onPhotoClick?: (item: { image: string; title: string; category?: string; location?: string }) => void;
+  onOpenAlbum?: (albumId: string) => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -164,14 +167,16 @@ export default function SelectedWork({
               ref={(el) => {
                 cardsRef.current[idx] = el;
               }}
-              className="work-card group block w-[82vw] shrink-0 snap-center overflow-hidden rounded-2xl bg-[#121212] sm:w-[62vw] md:w-[min(48vw,560px)] cursor-pointer select-none"
-              onClick={() => {
-                onPhotoClick?.({
-                  image: item.image.replace("w=900", "w=1800"),
-                  title: item.title,
-                  category: item.category,
-                  location: item.location || "Bijapur, Karnataka",
-                });
+              role="button"
+              tabIndex={0}
+              aria-label={`Open ${item.title} album`}
+              className="work-card group block w-[82vw] shrink-0 snap-center overflow-hidden rounded-2xl bg-[#121212] sm:w-[62vw] md:w-[min(48vw,560px)] cursor-pointer select-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#ffc800]"
+              onClick={() => onOpenAlbum?.(item.albumId)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onOpenAlbum?.(item.albumId);
+                }
               }}
             >
               {/* Media Container */}
@@ -197,7 +202,7 @@ export default function SelectedWork({
 
                 {/* Hover View Pill */}
                 <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0 font-mono text-[9px] tracking-widest uppercase text-[#ffc800] bg-black/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-[#ffc800]/40 flex items-center gap-1.5 shadow-lg shadow-black/50">
-                  <span>View Album</span>
+                  <span>View Album{item.count ? ` · ${item.count}` : ""}</span>
                   <span>↗</span>
                 </div>
               </div>

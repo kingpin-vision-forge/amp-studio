@@ -12,3 +12,12 @@ logs/
 .claude-replay.*
 .tmp-*
 .playwright-mcp/
+.AGENTS.md
+.claude/
+.figma/
+
+# Raw/working photo folders (originals ~2GB) - site copies live in public/gallery
+AMP PICS/
+AMP PICS (compressed)/
+AMP PICS (web)/
+.DS_Store

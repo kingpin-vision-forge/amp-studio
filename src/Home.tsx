@@ -10,6 +10,8 @@ import DriftWall, { type DriftWallItem } from "./DriftWall";
 import SelectedWork, { type WorkGalleryItem } from "./SelectedWork";
 import PhotoModal, { type PhotoModalItem } from "./PhotoModal";
 import LegalModal, { type LegalTab } from "./LegalModal";
+import AlbumModal from "./AlbumModal";
+import { albums, albumCover, albumPhotos, albumPick, type GalleryAlbum } from "./galleryData";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -50,50 +52,65 @@ const services = [
     num: "01",
     name: "Maternity",
     desc: "Graceful and intimate maternity sessions celebrating motherhood in natural light, shot in-studio or at home across Bijapur.",
-    img: "photo-1476703993599-0035a21b17a9",
+    albumId: "maternity",
+    img: albumPick("maternity", "landscape", 1, true)[0].src,
     alt: "Maternity photography session in Bijapur",
   },
   {
     num: "02",
     name: "Pre Wedding",
     desc: "Romantic, cinematic pre-wedding shoots around Bijapur heritage marvels including Gol Gumbaz, Ibrahim Rauza, and Bara Kaman.",
-    img: "photo-1519225421980-715cb0215aed",
+    albumId: "pre-wedding",
+    img: albumPick("pre-wedding", "landscape", 1, true)[0].src,
     alt: "Pre wedding photography in Bijapur",
   },
   {
     num: "03",
     name: "Wedding",
     desc: "Comprehensive wedding photography and videography for haldi, mehendi, sangeet, sacred mandap ceremonies, and grand receptions across North Karnataka.",
-    img: "photo-1520854221256-17451cc331bf",
+    albumId: "wedding",
+    img: albumPick("wedding", "landscape", 1, true)[0].src,
     alt: "Wedding photography in Bijapur, Karnataka",
   },
   {
     num: "04",
     name: "Occasions",
     desc: "Documenting birthdays, anniversaries, naming ceremonies, housewarmings, and festive family celebrations with candid realism.",
-    img: "photo-1511795409834-ef04bbd61622",
+    albumId: "occasions",
+    img: albumPick("occasions", "landscape", 1, true)[0].src,
     alt: "Occasions and celebrations photography in Bijapur",
   },
   {
     num: "05",
     name: "Candid Portraits",
     desc: "Unposed, authentic personal, creative, and family portraits captured with honest light and timeless character.",
-    img: "photo-1531746020798-e6953c6e8e04",
+    albumId: "candid-portraits",
+    img: albumPick("candid-portraits", "landscape", 1, true)[0].src,
     alt: "Candid portrait photography in Bijapur",
   },
   {
     num: "06",
     name: "Designing / Editing",
     desc: "Bespoke handcrafted photobook album design, high-end editorial retouching, color grading, and cinematic video post-production.",
-    img: "photo-1542744094-3a31727201eb",
+    albumId: "designing-editing",
+    img: albumPick("designing-editing", "landscape", 1, true)[0].src,
     alt: "Album designing and professional photo editing",
   },
   {
     num: "07",
     name: "New Borns",
     desc: "Delicate and patient newborn photography sessions prioritizing baby comfort, gentle natural lighting, and heirloom keepsakes.",
-    img: "photo-1555252333-9f8e92e65df9",
+    albumId: "new-borns",
+    img: albumPick("new-borns", "landscape", 1, true)[0].src,
     alt: "Newborn baby photography in Bijapur",
+  },
+  {
+    num: "08",
+    name: "Kids",
+    desc: "Fun, themed kids and birthday shoots with props and playful setups, paced around little ones so every smile comes naturally.",
+    albumId: "kids",
+    img: albumPick("kids", "landscape", 1, true)[0].src,
+    alt: "Kids photography in Bijapur",
   },
 ];
 
@@ -120,27 +137,32 @@ const faqItems = [
   },
 ];
 
-const driftWallImages = [
-  { src: "photo-1519225421980-715cb0215aed", label: "Engagement photography, Bijapur" },
-  { src: "photo-1606800052052-a08af7148866", label: "Wedding photography, Bijapur" },
-  { src: "photo-1529636798458-92182e662485", label: "Candid couple photography, Bijapur" },
-  { src: "photo-1520854221256-17451cc331bf", label: "Wedding photography, North Karnataka" },
-  { src: "photo-1583939003579-730e3918a45a", label: "Pre-wedding shoot, Bijapur" },
-  { src: "photo-1476703993599-0035a21b17a9", label: "Maternity photography, Bijapur" },
-  { src: "photo-1531746020798-e6953c6e8e04", label: "Portrait photography, Bijapur" },
-  { src: "photo-1555252333-9f8e92e65df9", label: "Family portrait photography, Bijapur" },
-].map(({ src, label }) => ({
-  image: `https://images.unsplash.com/${src}?w=600&q=80&fit=crop&auto=format`,
-  title: label,
-}));
+/* Hero wall: portrait photos from every album, interleaved so neighbouring tiles differ */
+const driftWallSources: [string, string, number][] = [
+  ["wedding", "Wedding photography, Bijapur", 3],
+  ["pre-wedding", "Pre-wedding shoot, Bijapur", 2],
+  ["maternity", "Maternity photography, Bijapur", 2],
+  ["kids", "Kids photography, Bijapur", 2],
+  ["new-borns", "Newborn photography, Bijapur", 2],
+  ["candid-portraits", "Candid portrait photography, Bijapur", 2],
+  ["occasions", "Occasions photography, Bijapur", 1],
+  ["designing-editing", "Album design by AMP Studio", 1],
+];
+const driftWallLists = driftWallSources.map(([id, title, n]) =>
+  albumPick(id, "portrait", n).map((p) => ({ image: p.src, title })),
+);
+const driftWallImages = Array.from({ length: 3 }, (_, round) => driftWallLists.map((list) => list[round])).flat().filter(
+  (item): item is { image: string; title: string } => Boolean(item),
+);
 
-const galleryItems: WorkGalleryItem[] = [
+const galleryItems: WorkGalleryItem[] = ([
   {
     num: "01",
     title: "Maternity",
     category: "Studio Album · 2025",
     meta: "2025",
-    image: "https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=900&q=85&fit=crop&auto=format",
+    albumId: "maternity",
+    image: albumCover("maternity"),
     desc: "Intimate and serene maternity albums celebrating the beauty of expecting parents in natural light.",
     tags: ["Natural Light", "Fine Art", "Studio Portraits"],
     location: "Bijapur, Karnataka",
@@ -150,7 +172,8 @@ const galleryItems: WorkGalleryItem[] = [
     title: "Pre Wedding",
     category: "Cinematic Film · 2025",
     meta: "2025",
-    image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=900&q=85&fit=crop&auto=format",
+    albumId: "pre-wedding",
+    image: albumCover("pre-wedding"),
     desc: "Cinematic romantic pre-wedding stories documented across Bijapur's architectural marvels and golden sunsets.",
     tags: ["Heritage Locations", "Drone 4K", "Cinematic Film"],
     location: "Gol Gumbaz & Bijapur",
@@ -160,7 +183,8 @@ const galleryItems: WorkGalleryItem[] = [
     title: "Wedding",
     category: "Sacred Ceremonies · 2025",
     meta: "2025",
-    image: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=900&q=85&fit=crop&auto=format",
+    albumId: "wedding",
+    image: albumCover("wedding"),
     desc: "Heirloom wedding collections capturing the sacred vows, laughter, tears, and vibrant North Karnataka festivities.",
     tags: ["Heirloom Album", "Muhurtham", "Traditional Rituals"],
     location: "Vijayapura Mandapam",
@@ -170,7 +194,8 @@ const galleryItems: WorkGalleryItem[] = [
     title: "Occasions",
     category: "Family Milestones · 2025",
     meta: "2025",
-    image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=900&q=85&fit=crop&auto=format",
+    albumId: "occasions",
+    image: albumCover("occasions"),
     desc: "Joyous milestone celebrations, anniversaries, cradle ceremonies, and cultural gatherings preserved forever.",
     tags: ["Anniversaries", "Cradle Ceremony", "Festivities"],
     location: "Bijapur, Karnataka",
@@ -180,7 +205,8 @@ const galleryItems: WorkGalleryItem[] = [
     title: "Candid Portraits",
     category: "Signature Series · 2025",
     meta: "2025",
-    image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=900&q=85&fit=crop&auto=format",
+    albumId: "candid-portraits",
+    image: albumCover("candid-portraits"),
     desc: "Raw, expressive candid portraits illuminating genuine personalities and honest human emotion.",
     tags: ["Editorial", "Ambient Light", "Black & White"],
     location: "AMP Studio, Bijapur",
@@ -190,7 +216,8 @@ const galleryItems: WorkGalleryItem[] = [
     title: "Designing / Editing",
     category: "Post-Production · 2025",
     meta: "2025",
-    image: "https://images.unsplash.com/photo-1542744094-3a31727201eb?w=900&q=85&fit=crop&auto=format",
+    albumId: "designing-editing",
+    image: albumCover("designing-editing"),
     desc: "Signature custom-bound photobooks, artisanal layouts, precision color-correction, and cinematic film cuts.",
     tags: ["Custom Binding", "Color Grading", "Handcrafted Layouts"],
     location: "Design Suite",
@@ -200,12 +227,24 @@ const galleryItems: WorkGalleryItem[] = [
     title: "New Borns",
     category: "Gentle Memories · 2025",
     meta: "2025",
-    image: "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=900&q=85&fit=crop&auto=format",
+    albumId: "new-borns",
+    image: albumCover("new-borns"),
     desc: "Tender, peaceful portraits of your newborn's earliest days, wrapped in warmth and timeless simplicity.",
     tags: ["Studio Setup", "Gentle Light", "Keepsake Frames"],
     location: "AMP Baby Studio",
   },
-];
+  {
+    num: "08",
+    title: "Kids",
+    category: "Playful Moments · 2025",
+    meta: "2025",
+    albumId: "kids",
+    image: albumCover("kids"),
+    desc: "Bright, playful portraits of little ones being themselves, full of giggles, curiosity, and colour.",
+    tags: ["Birthday Shoots", "Theme Setups", "Outdoor Play"],
+    location: "AMP Studio, Bijapur",
+  },
+] as WorkGalleryItem[]).map((item) => ({ ...item, count: albumPhotos(albums[item.albumId]).length }));
 
 const testimonials: {
   stars: string;
@@ -214,39 +253,50 @@ const testimonials: {
   meta: string;
   avatar?: string;
 }[] = [
-  {
-    stars: "★★★★★",
-    text: "Highly recommended! I got my brother's birthday photo frame designed by Amma Mahadevi Photography Studio, and it turned out absolutely amazing. The design, photo editing, print quality, and frame finish were all excellent. They were very patient with my requests and delivered exactly what I wanted. My brother loved the gift! Thank you for the beautiful work and great service. I'll definitely come back again.",
-    name: "Sudeep Kadam",
-    meta: "Google Review",
-    avatar: "/reviews/reviewer-1.png",
-  },
-  {
-    stars: "★★★★★",
-    text: "Absolutely loved the photography for our ring ceremony! Every special moment was captured so beautifully and naturally. The pictures are full of emotions, details, and memories we'll cherish forever. The team was professional, creative, and made us feel comfortable throughout the event. Highly recommended for anyone who wants their special day captured perfectly!",
-    name: "Sachin Sanadi",
-    meta: "Google Review",
-    avatar: "/reviews/reviewer-2.png",
-  },
-  {
-    stars: "★★★★★",
-    text: "One of the best photo studio in Vijayapura. Thank you so much for the all photos. They arrived on time, maintained a friendly and approachable demeanor, made us feel ease throughout the session.",
-    name: "Deepa S",
-    meta: "Google Review",
-  },
-  {
-    stars: "★★★★★",
-    text: "I just explained how my kid photoshoot. They have taken care everything with proper all poses and emotions were captured.",
-    name: "Saddam Bavakhan",
-    meta: "Local Guide · Google Review",
-  },
-  {
-    stars: "★★★★★",
-    text: "Absolutely loved my experience with Amma Mahadevi Photography! Their service, staff, atmosphere, and speed were all excellent, and the product quality for the price was outstanding.",
-    name: "Sachin Kulkarni",
-    meta: "Local Guide · Google Review",
-    avatar: "/reviews/reviewer-3.png",
-  },
+    {
+      stars: "★★★★★",
+      text: "Highly recommended! I got my brother's birthday photo frame designed by Amma Mahadevi Photography Studio, and it turned out absolutely amazing. The design, photo editing, print quality, and frame finish were all excellent. They were very patient with my requests and delivered exactly what I wanted. My brother loved the gift! Thank you for the beautiful work and great service. I'll definitely come back again.",
+      name: "Sudeep Kadam",
+      meta: "Google Review",
+      avatar: "/reviews/reviewer-1.png",
+    },
+    {
+      stars: "★★★★★",
+      text: "Absolutely loved the photography for our ring ceremony! Every special moment was captured so beautifully and naturally. The pictures are full of emotions, details, and memories we'll cherish forever. The team was professional, creative, and made us feel comfortable throughout the event. Highly recommended for anyone who wants their special day captured perfectly!",
+      name: "Sachin Sanadi",
+      meta: "Google Review",
+      avatar: "/reviews/reviewer-2.png",
+    },
+    {
+      stars: "★★★★★",
+      text: "One of the best photo studio in Vijayapura. Thank you so much for the all photos. They arrived on time, maintained a friendly and approachable demeanor, made us feel ease throughout the session.",
+      name: "Deepa S",
+      meta: "Google Review",
+    },
+    {
+      stars: "★★★★★",
+      text: "I just explained how my kid photoshoot. They have taken care everything with proper all poses and emotions were captured.",
+      name: "Saddam Bavakhan",
+      meta: "Local Guide · Google Review",
+    },
+    {
+      stars: "★★★★★",
+      text: "Absolutely loved my experience with Amma Mahadevi Photography! Their service, staff, atmosphere, and speed were all excellent, and the product quality for the price was outstanding.",
+      name: "Sachin Kulkarni",
+      meta: "Local Guide · Google Review",
+      avatar: "/reviews/reviewer-3.png",
+    },
+  ];
+
+const carouselTestimonials = [
+  { testimonial: testimonials[testimonials.length - 1], key: "clone-last", cloned: true },
+  ...testimonials.map((testimonial, index) => ({
+    testimonial,
+    key: `review-${index}`,
+    cloned: false,
+  })),
+  { testimonial: testimonials[0], key: "clone-first", cloned: true },
+  { testimonial: testimonials[1], key: "clone-second", cloned: true },
 ];
 
 
@@ -254,11 +304,11 @@ const testimonials: {
 function ServiceRow({
   svc,
   i,
-  onPhotoClick,
+  onOpenAlbum,
 }: {
   svc: (typeof services)[0];
   i: number;
-  onPhotoClick?: (item: PhotoModalItem) => void;
+  onOpenAlbum?: (albumId: string) => void;
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const [rotX, setRotX] = useState(0);
@@ -323,18 +373,13 @@ function ServiceRow({
           className="w-full md:col-span-4 flex justify-start md:justify-end items-center relative z-20 my-2 md:my-0 pl-7 md:pl-0"
           onClick={(e) => {
             e.stopPropagation();
-            onPhotoClick?.({
-              image: `https://images.unsplash.com/${svc.img}?w=1600&q=90&fit=crop&auto=format`,
-              title: svc.name,
-              category: "AMP Studio · Services Archive",
-              location: "Bijapur, Karnataka",
-            });
+            onOpenAlbum?.(svc.albumId);
           }}
         >
           <div
             className={`relative rounded-xl md:rounded-2xl overflow-hidden shadow-xl transition-all duration-500 ease-out border ${isHovered
-                ? "w-full md:w-64 h-48 md:h-40 opacity-100 scale-100 border-[#ffc800]/60 shadow-[0_20px_50px_rgba(0,0,0,0.95)]"
-                : "w-36 md:w-36 h-24 md:h-20 opacity-80 border-white/10"
+              ? "w-full md:w-64 h-48 md:h-40 opacity-100 scale-100 border-[#ffc800]/60 shadow-[0_20px_50px_rgba(0,0,0,0.95)]"
+              : "w-36 md:w-36 h-24 md:h-20 opacity-80 border-white/10"
               }`}
             style={{
               perspective: "1000px",
@@ -345,7 +390,7 @@ function ServiceRow({
             }}
           >
             <img
-              src={`https://images.unsplash.com/${svc.img}?w=800&q=85&fit=crop&auto=format`}
+              src={svc.img}
               alt={svc.alt}
               className={`w-full h-full object-cover transition-transform duration-700 ${isHovered ? "scale-110" : "scale-100"
                 }`}
@@ -371,6 +416,13 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
   const [stat2, setStat2] = useState(0);
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoModalItem | null>(null);
   const [legalTab, setLegalTab] = useState<LegalTab | null>(null);
+  const [openAlbum, setOpenAlbum] = useState<GalleryAlbum | null>(null);
+  const [reviewTrackIndex, setReviewTrackIndex] = useState(1);
+  const [reviewStep, setReviewStep] = useState(0);
+  const [reviewTransition, setReviewTransition] = useState(false);
+  const [reviewsPaused, setReviewsPaused] = useState(false);
+  const [reviewsInteracting, setReviewsInteracting] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   /* Frame Sequence State & Refs */
   const frameBadgeRef = useRef<HTMLDivElement | null>(null);
@@ -383,6 +435,105 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
   const lenisRef = useRef<Lenis | null>(null);
   const ringRef = useRef({ x: -100, y: -100, tx: -100, ty: -100 });
   const rafRef = useRef<number>(0);
+  const reviewsViewportRef = useRef<HTMLDivElement>(null);
+  const reviewsTrackRef = useRef<HTMLDivElement>(null);
+  const reviewTouchStartRef = useRef<number | null>(null);
+
+  const activeReviewIndex = (reviewTrackIndex - 1 + testimonials.length) % testimonials.length;
+
+  const moveReviews = (direction: 1 | -1) => {
+    setReviewTransition(!prefersReducedMotion);
+    setReviewTrackIndex((current) =>
+      Math.min(testimonials.length + 1, Math.max(0, current + direction))
+    );
+  };
+
+  const goToReview = (index: number) => {
+    setReviewTransition(!prefersReducedMotion);
+    setReviewTrackIndex(index + 1);
+  };
+
+  const handleReviewTransitionEnd = (event: React.TransitionEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget || event.propertyName !== "transform") return;
+
+    const resetIndex = reviewTrackIndex === 0
+      ? testimonials.length
+      : reviewTrackIndex === testimonials.length + 1
+        ? 1
+        : null;
+
+    if (resetIndex === null) return;
+
+    setReviewTransition(false);
+    setReviewTrackIndex(resetIndex);
+    requestAnimationFrame(() => requestAnimationFrame(() => setReviewTransition(true)));
+  };
+
+  const handleReviewTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    reviewTouchStartRef.current = event.touches[0]?.clientX ?? null;
+    setReviewsInteracting(true);
+  };
+
+  const handleReviewTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    const startX = reviewTouchStartRef.current;
+    const endX = event.changedTouches[0]?.clientX;
+    reviewTouchStartRef.current = null;
+    setReviewsInteracting(false);
+
+    if (startX === null || endX === undefined) return;
+    const distance = endX - startX;
+    if (Math.abs(distance) < 40) return;
+    moveReviews(distance < 0 ? 1 : -1);
+  };
+
+  /* Respect motion preferences for carousel autoplay and transitions. */
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncPreference = () => setPrefersReducedMotion(mediaQuery.matches);
+    syncPreference();
+    mediaQuery.addEventListener("change", syncPreference);
+    return () => mediaQuery.removeEventListener("change", syncPreference);
+  }, []);
+
+  /* Keep the carousel step aligned with one full card plus its gap. */
+  useEffect(() => {
+    const viewport = reviewsViewportRef.current;
+    const track = reviewsTrackRef.current;
+    if (!viewport || !track) return;
+
+    let animationFrame = 0;
+    const measure = () => {
+      const card = track.querySelector<HTMLElement>(".testimonial-carousel-card");
+      if (!card) return;
+      setReviewTransition(false);
+      setReviewStep(card.getBoundingClientRect().width + 12);
+      cancelAnimationFrame(animationFrame);
+      animationFrame = requestAnimationFrame(() =>
+        requestAnimationFrame(() => setReviewTransition(true))
+      );
+    };
+
+    measure();
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(viewport);
+
+    return () => {
+      resizeObserver.disconnect();
+      cancelAnimationFrame(animationFrame);
+    };
+  }, []);
+
+  /* Autoplay is intentionally slow and stops during any user interaction. */
+  useEffect(() => {
+    if (!loaded || reviewsPaused || reviewsInteracting || prefersReducedMotion) return;
+
+    const autoplay = window.setInterval(() => {
+      setReviewTransition(true);
+      setReviewTrackIndex((current) => Math.min(current + 1, testimonials.length + 1));
+    }, 5200);
+
+    return () => window.clearInterval(autoplay);
+  }, [loaded, reviewsPaused, reviewsInteracting, prefersReducedMotion]);
 
   /* Preload 22 Frame Images from amp-rahul-pics */
   useEffect(() => {
@@ -516,6 +667,13 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
     }
   }, [loaded]);
 
+  /* Pause smooth scrolling behind the album pop-up */
+  useEffect(() => {
+    if (!lenisRef.current || !loaded) return;
+    if (openAlbum) lenisRef.current.stop();
+    else lenisRef.current.start();
+  }, [openAlbum, loaded]);
+
   /* Smooth scroll for anchor navigation */
   const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith("#")) {
@@ -548,6 +706,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
   useEffect(() => {
     if (!loaded) return;
 
+    const testimonialMotion = gsap.matchMedia();
     const ctx = gsap.context(() => {
       // 1. Hero Entrance Timeline
       const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
@@ -670,16 +829,139 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         }
       );
 
-      // 6. Testimonials Section
-      gsap.fromTo(".gsap-quote-block", { scale: 0.96, opacity: 0 }, {
-        scrollTrigger: { trigger: "#reviews", start: "top 95%" },
-        scale: 1, opacity: 1, duration: 0.8, ease: "power3.out", clearProps: "transform,opacity"
-      });
+      // 6. Testimonials Section - one editorial reveal, then quiet hover feedback.
+      const reviewsSection = mainRef.current?.querySelector<HTMLElement>("#reviews");
 
-      gsap.fromTo(".gsap-review-card", { y: 30, opacity: 0 }, {
-        scrollTrigger: { trigger: "#reviews", start: "top 95%" },
-        y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: "power3.out", clearProps: "transform,opacity"
-      });
+      if (reviewsSection) {
+        testimonialMotion.add(
+          {
+            motionOK: "(prefers-reduced-motion: no-preference)",
+            reducedMotion: "(prefers-reduced-motion: reduce)",
+          },
+          (context) => {
+            const motionOK = context.conditions?.motionOK;
+            const title = reviewsSection.querySelector(".gsap-reviews-title");
+            const intro = reviewsSection.querySelector(".gsap-reviews-intro");
+            const quote = reviewsSection.querySelector(".gsap-quote-block");
+            const quoteMark = reviewsSection.querySelector(".gsap-quote-mark");
+            const credit = reviewsSection.querySelector(".gsap-quote-credit");
+            const cards = reviewsSection.querySelectorAll(".gsap-review-card");
+            const stars = reviewsSection.querySelectorAll(".review-star");
+            const easeOut = "cubic-bezier(0.23, 1, 0.32, 1)";
+            const revealTargets = [title, intro, quote, credit, ...Array.from(cards)].filter(Boolean);
+
+            const reviewsTl = gsap.timeline({
+              scrollTrigger: {
+                trigger: reviewsSection,
+                start: "top 78%",
+                once: true,
+              },
+            });
+
+            if (!motionOK) {
+              reviewsTl.fromTo(
+                revealTargets,
+                { opacity: 0 },
+                {
+                  opacity: 1,
+                  duration: 0.2,
+                  stagger: 0.03,
+                  ease: easeOut,
+                  clearProps: "opacity",
+                }
+              );
+              return;
+            }
+
+            reviewsTl
+              .fromTo(
+                title,
+                { transform: "translateY(32px)", opacity: 0 },
+                {
+                  transform: "translateY(0px)",
+                  opacity: 1,
+                  duration: 0.7,
+                  ease: easeOut,
+                  clearProps: "transform,opacity",
+                }
+              )
+              .fromTo(
+                intro,
+                { transform: "translateY(18px)", opacity: 0 },
+                {
+                  transform: "translateY(0px)",
+                  opacity: 1,
+                  duration: 0.6,
+                  ease: easeOut,
+                  clearProps: "transform,opacity",
+                },
+                "-=0.48"
+              )
+              .fromTo(
+                quote,
+                { transform: "translateY(28px) scale(0.97)", opacity: 0 },
+                {
+                  transform: "translateY(0px) scale(1)",
+                  opacity: 1,
+                  duration: 0.8,
+                  ease: easeOut,
+                  clearProps: "transform,opacity",
+                },
+                "-=0.26"
+              )
+              .fromTo(
+                quoteMark,
+                { transform: "rotate(-8deg) scale(0.92)", opacity: 0 },
+                {
+                  transform: "rotate(0deg) scale(1)",
+                  opacity: 1,
+                  duration: 0.65,
+                  ease: easeOut,
+                  clearProps: "transform,opacity",
+                },
+                "-=0.62"
+              )
+              .fromTo(
+                credit,
+                { transform: "translateY(12px)", opacity: 0 },
+                {
+                  transform: "translateY(0px)",
+                  opacity: 1,
+                  duration: 0.5,
+                  ease: easeOut,
+                  clearProps: "transform,opacity",
+                },
+                "-=0.38"
+              )
+              .fromTo(
+                cards,
+                { transform: "translateY(40px) scale(0.985)", opacity: 0 },
+                {
+                  transform: "translateY(0px) scale(1)",
+                  opacity: 1,
+                  duration: 0.7,
+                  stagger: 0.09,
+                  ease: easeOut,
+                  clearProps: "transform,opacity",
+                },
+                "-=0.22"
+              )
+              .fromTo(
+                stars,
+                { transform: "translateY(30%) scale(0.9)", opacity: 0 },
+                {
+                  transform: "translateY(0%) scale(1)",
+                  opacity: 1,
+                  duration: 0.35,
+                  stagger: 0.025,
+                  ease: easeOut,
+                  clearProps: "transform,opacity",
+                },
+                "-=0.55"
+              );
+          }
+        );
+      }
 
       // 7. FAQ Section
       gsap.fromTo(".gsap-faq-header", { y: 30, opacity: 0 }, {
@@ -707,7 +989,10 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       setTimeout(() => ScrollTrigger.refresh(), 100);
     }, mainRef);
 
-    return () => ctx.revert();
+    return () => {
+      testimonialMotion.revert();
+      ctx.revert();
+    };
   }, [loaded]);
 
   /* Smooth cursor ring via rAF */
@@ -1002,9 +1287,9 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
             pauseOnHover
             onItemClick={(item: DriftWallItem) => {
               setSelectedPhoto({
-                image: item.image.replace("w=600", "w=1600"),
+                image: item.image,
                 title: item.title || "AMP Studio Photography",
-                category: "Bijapur Photography Archive",
+                category: "AMP Studio Portfolio",
                 location: "Bijapur, Karnataka",
               });
             }}
@@ -1028,26 +1313,28 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       {/* About Section - Studio Showcase with Shop Image & Link to Founders */}
       <section
         id="about"
-        className="w-full min-h-screen min-h-[100dvh] relative overflow-hidden flex flex-col justify-center px-6 lg:px-14 xl:px-20 py-20 md:py-28"
+        className="w-full relative overflow-hidden px-6 lg:px-14 xl:px-20 py-20 md:py-28"
         style={{ borderTop: `1px solid ${BORDER}`, background: BG_DARK }}
       >
-        <div className="w-full my-auto" style={{ maxWidth: 1480, margin: "0 auto" }}>
-          {/* Main Grid: Studio Shop Image on Left, Text + Stats on Right */}
-          <div className="grid md:grid-cols-12 gap-10 md:gap-12 lg:gap-16 items-center">
-            {/* Studio Workspace / Shop Image */}
-            <div className="gsap-about-frame-container md:col-span-6 relative rounded-2xl overflow-hidden border border-white/15 bg-[#070707] shadow-2xl group">
-              <div className="aspect-[4/3] sm:aspect-[16/10] md:aspect-[4/3] lg:aspect-[16/11] xl:aspect-[5/4] w-full relative overflow-hidden min-h-[340px] md:min-h-[460px] lg:min-h-[540px]">
+        <div className="w-full" style={{ maxWidth: 1480, margin: "0 auto" }}>
+          {/* Studio panorama leads, followed by the story and proof points. */}
+          <div className="grid md:grid-cols-12 gap-y-12 md:gap-y-16">
+            <div className="gsap-about-frame-container md:col-span-12 relative rounded-2xl overflow-hidden border border-white/15 bg-[#070707]">
+              <div className="aspect-[1600/733] w-full relative overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=1400&q=85&fit=crop&auto=format"
+                  src="/studio.png"
                   alt="AMP Studio photography workspace and studio in Bijapur"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  width="1600"
+                  height="733"
+                  className="block w-full h-full object-contain"
+                  loading="lazy"
+                  decoding="async"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
               </div>
             </div>
 
-            {/* About Text + Stat Counters + About Founders Button */}
-            <div className="md:col-span-6 flex flex-col justify-center space-y-7 md:space-y-8">
+            {/* About Text + About Founders Button */}
+            <div className="md:col-span-12 lg:col-span-10 lg:col-start-2 xl:col-span-8 xl:col-start-3 flex flex-col justify-center space-y-7 md:space-y-8">
               {/* Subtle kicker badge */}
               <div className="flex items-center gap-3">
                 <span
@@ -1145,7 +1432,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       {/* Selected Work Gallery (Side scrolling on scroll down matching kingpinvisionforge.com) */}
       <SelectedWork
         items={galleryItems}
-        onPhotoClick={(item) => setSelectedPhoto(item)}
+        onOpenAlbum={(id) => setOpenAlbum(albums[id] ?? null)}
       />
 
       {/* Services */}
@@ -1168,7 +1455,7 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
                 key={svc.num}
                 svc={svc}
                 i={i}
-                onPhotoClick={(item) => setSelectedPhoto(item)}
+                onOpenAlbum={(id) => setOpenAlbum(albums[id] ?? null)}
               />
             ))}
           </div>
@@ -1176,14 +1463,14 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
       </section>
 
       {/* Testimonials */}
-      <section id="reviews" style={{ borderTop: `1px solid ${BORDER}`, padding: "6rem 1.5rem" }}>
+      <section id="reviews" className="testimonials-section" style={{ borderTop: `1px solid ${BORDER}`, padding: "6rem 1.5rem" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div className="flex flex-col gap-3 mb-12">
-            <h2 style={{ ...serif, fontWeight: 300, fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", letterSpacing: "-0.025em", lineHeight: 1.1, color: WHITE }} className="whitespace-nowrap flex items-baseline gap-3">
+            <h2 style={{ ...serif, fontWeight: 300, fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", letterSpacing: "-0.025em", lineHeight: 1.1, color: WHITE }} className="gsap-reviews-title whitespace-nowrap flex items-baseline gap-3">
               <span>Client</span>
               <em style={{ ...script, color: GOLD }}>Stories</em>
             </h2>
-            <p className="text-sm md:text-base leading-relaxed max-w-xl" style={{ color: MUTED }}>
+            <p className="gsap-reviews-intro text-sm md:text-base leading-relaxed max-w-xl" style={{ color: MUTED }}>
               Read what couples and families across Bijapur say about their candid photo sessions.
             </p>
           </div>
@@ -1193,54 +1480,148 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
             style={{ ...serif, fontWeight: 300, fontStyle: "italic", fontSize: "clamp(1.4rem, 2.8vw, 2.5rem)", letterSpacing: "-0.025em", lineHeight: 1.4, color: WHITE, maxWidth: 780 }}
           >
             <span
-              className="absolute pointer-events-none select-none"
+              className="gsap-quote-mark absolute pointer-events-none select-none"
               style={{ ...serif, fontSize: "8rem", color: BORDER, lineHeight: 1, top: "-1rem", left: "-1.5rem" }}
+              aria-hidden="true"
             >
               "
             </span>
             "AMP Studio photographed our Bijapur wedding. The photos captured each part of the day, including the ceremony rituals, reception, and small details."
           </blockquote>
-          <div className="text-center mb-20" style={{ ...mono, fontSize: "0.7rem", color: MUTED, letterSpacing: "0.2em", textTransform: "uppercase" }}>
+          <div className="gsap-quote-credit text-center mb-20" style={{ ...mono, fontSize: "0.7rem", color: MUTED, letterSpacing: "0.2em", textTransform: "uppercase" }}>
             Aishwarya & Sanjay · Wedding, Bijapur
           </div>
 
-          <div className="gsap-reviews-grid grid md:grid-cols-2 gap-3">
-            {testimonials.map((t, i) => (
-              <div
-                key={i}
-                className={`gsap-review-card flex flex-col justify-between${i === testimonials.length - 1 && testimonials.length % 2 === 1 ? " md:col-span-2" : ""}`}
-                style={{ background: CARD, border: `1px solid ${BORDER}`, padding: "2rem", transition: "border-color 0.3s" }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = "#2a2a2a")}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = BORDER)}
-              >
-                <div
-                  style={{
-                    ...mono,
-                    fontSize: "1.25rem",
-                    color: GOLD,
-                    letterSpacing: "0.2em",
-                    marginBottom: "1.25rem",
-                    textShadow: "0 0 10px rgba(255,200,0,0.35)",
-                  }}
+          <div
+            ref={reviewsViewportRef}
+            className="testimonials-viewport"
+            onMouseEnter={() => setReviewsInteracting(true)}
+            onMouseLeave={() => setReviewsInteracting(false)}
+            onFocusCapture={() => setReviewsInteracting(true)}
+            onBlurCapture={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) setReviewsInteracting(false);
+            }}
+            onTouchStart={handleReviewTouchStart}
+            onTouchEnd={handleReviewTouchEnd}
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="Client testimonials"
+          >
+            <div
+              ref={reviewsTrackRef}
+              className="gsap-reviews-grid testimonials-track"
+              style={{
+                transform: `translate3d(${-reviewTrackIndex * reviewStep}px, 0, 0)`,
+                transition: reviewTransition
+                  ? "transform 500ms var(--ease-in-out)"
+                  : "none",
+                visibility: reviewStep > 0 ? "visible" : "hidden",
+              }}
+              onTransitionEnd={handleReviewTransitionEnd}
+              role="list"
+              aria-live={reviewsPaused ? "polite" : "off"}
+            >
+              {carouselTestimonials.map(({ testimonial: t, key, cloned }) => (
+                <article
+                  key={key}
+                  className="gsap-review-card testimonial-card testimonial-carousel-card flex flex-col justify-between"
+                  style={{ background: CARD, border: `1px solid ${BORDER}`, padding: "2rem" }}
+                  role="listitem"
+                  aria-hidden={cloned || undefined}
                 >
-                  {t.stars}
-                </div>
-                <p style={{ ...serif, fontSize: "1rem", fontStyle: "italic", color: MUTED, lineHeight: 1.75, marginBottom: "1.25rem" }}>{t.text}</p>
-                <div className="flex items-center gap-3">
-                  <div className="rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center" style={{ width: 36, height: 36, background: "#2a2a2a", ...mono, fontSize: "0.8rem", color: GOLD }}>
-                    {t.avatar ? (
-                      <img src={t.avatar} alt={`${t.name}, AMP Studio client`} className="w-full h-full object-cover" />
-                    ) : (
-                      t.name.charAt(0)
-                    )}
+                  <div
+                    className="testimonial-stars flex"
+                    style={{
+                      ...mono,
+                      fontSize: "1.25rem",
+                      color: GOLD,
+                      letterSpacing: "0.2em",
+                      marginBottom: "1.25rem",
+                      textShadow: "0 0 10px rgba(255,200,0,0.35)",
+                    }}
+                    role="img"
+                    aria-label="5 out of 5 stars"
+                  >
+                    {Array.from(t.stars).map((star, starIndex) => (
+                      <span key={starIndex} className="review-star inline-block" aria-hidden="true">
+                        {star}
+                      </span>
+                    ))}
                   </div>
-                  <div>
-                    <div style={{ fontSize: "0.8rem", color: WHITE, fontWeight: 300 }}>{t.name}</div>
-                    <div style={{ ...mono, fontSize: "0.65rem", color: MUTED, letterSpacing: "0.1em", marginTop: "0.1rem" }}>{t.meta}</div>
+                  <p className="testimonial-copy" style={{ ...serif, fontSize: "1rem", fontStyle: "italic", color: MUTED, lineHeight: 1.75, marginBottom: "1.25rem" }}>{t.text}</p>
+                  <div className="testimonial-author flex items-center gap-3">
+                    <div className="testimonial-avatar rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center" style={{ width: 36, height: 36, background: "#2a2a2a", ...mono, fontSize: "0.8rem", color: GOLD }}>
+                      {t.avatar ? (
+                        <img src={t.avatar} alt={`${t.name}, AMP Studio client`} className="w-full h-full object-cover" />
+                      ) : (
+                        t.name.charAt(0)
+                      )}
+                    </div>
+                    <div>
+                      <div style={{ fontSize: "0.8rem", color: WHITE, fontWeight: 300 }}>{t.name}</div>
+                      <div style={{ ...mono, fontSize: "0.65rem", color: MUTED, letterSpacing: "0.1em", marginTop: "0.1rem" }}>{t.meta}</div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                </article>
+              ))}
+            </div>
+          </div>
+
+          <div
+            className="testimonial-controls"
+            onMouseEnter={() => setReviewsInteracting(true)}
+            onMouseLeave={() => setReviewsInteracting(false)}
+            onFocusCapture={() => setReviewsInteracting(true)}
+            onBlurCapture={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) setReviewsInteracting(false);
+            }}
+            aria-label="Testimonial carousel controls"
+          >
+            <div className="testimonial-dots" role="group" aria-label="Choose a testimonial">
+              {testimonials.map((testimonial, index) => (
+                <button
+                  key={testimonial.name}
+                  type="button"
+                  className="testimonial-dot"
+                  data-active={activeReviewIndex === index || undefined}
+                  onClick={() => goToReview(index)}
+                  aria-label={`Show testimonial ${index + 1} from ${testimonial.name}`}
+                  aria-current={activeReviewIndex === index ? "true" : undefined}
+                />
+              ))}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="testimonial-count" aria-live="polite">
+                {String(activeReviewIndex + 1).padStart(2, "0")} / {String(testimonials.length).padStart(2, "0")}
+              </span>
+              <button
+                type="button"
+                className="testimonial-control-button"
+                onClick={() => setReviewsPaused((paused) => !paused)}
+                disabled={prefersReducedMotion}
+                aria-label={prefersReducedMotion ? "Autoplay disabled by reduced motion preference" : reviewsPaused ? "Play testimonials" : "Pause testimonials"}
+                title={prefersReducedMotion ? "Autoplay disabled by reduced motion preference" : reviewsPaused ? "Play" : "Pause"}
+              >
+                <span aria-hidden="true">{reviewsPaused || prefersReducedMotion ? "▶" : "Ⅱ"}</span>
+              </button>
+              <button
+                type="button"
+                className="testimonial-control-button"
+                onClick={() => moveReviews(-1)}
+                aria-label="Previous testimonial"
+              >
+                <span aria-hidden="true">←</span>
+              </button>
+              <button
+                type="button"
+                className="testimonial-control-button"
+                onClick={() => moveReviews(1)}
+                aria-label="Next testimonial"
+              >
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -1392,6 +1773,9 @@ export default function Home({ loaded = true }: { loaded?: boolean }) {
         photo={selectedPhoto}
         onClose={() => setSelectedPhoto(null)}
       />
+
+      {/* Category album pop-up, opened from Selected Work */}
+      <AlbumModal album={openAlbum} onClose={() => setOpenAlbum(null)} />
 
       {/* Terms & Conditions / Privacy Policy / Cookie Policy Modal */}
       <LegalModal
