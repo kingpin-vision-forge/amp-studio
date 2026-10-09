@@ -290,10 +290,10 @@ export default function FoundersPage() {
                 <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end z-30">
                   <div>
                     <h3 style={{ ...serif }} className="text-2xl text-white font-light">
-                      Rahul
+                      Rahul R Chavan
                     </h3>
                     <p style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase mt-0.5">
-                      Founder & Creative Director
+                      Founder &amp; Lead Photographer
                     </p>
                   </div>
                   <div style={{ ...mono }} className="text-[0.65rem] text-white/50 tracking-widest uppercase">
@@ -310,18 +310,89 @@ export default function FoundersPage() {
             <div className="md:col-span-7 flex flex-col justify-center space-y-6">
               <div className="flex items-center gap-2">
                 <span style={{ ...mono }} className="text-xs text-[#ffc800] tracking-widest uppercase">
-                  Founder & Visionary
+                  About The Founder
                 </span>
               </div>
               <h2 style={{ ...serif }} className="text-4xl lg:text-5xl text-white font-light leading-tight">
-                Preserving Life in <span style={{ ...script, color: GOLD }} className="text-5xl lg:text-7xl">Continuous</span> Motion
+                About The Founder — <span style={{ ...script, color: GOLD }} className="text-5xl lg:text-7xl">Rahul R Chavan</span>
               </h2>
-              <p style={{ ...sans }} className="text-base text-[#a0a09a] leading-relaxed font-light">
-                Founded in Bijapur by Rahul, AMP Studio was established with a singular vision: to liberate wedding and portrait photography from artificial poses and over-processed aesthetics, returning to authentic light, quiet connections, and enduring heritage.
+              <p style={{ ...mono }} className="text-xs text-[#ffc800] tracking-wider uppercase font-medium">
+                Founder | Amma Mahadevi Photography Studio (AMP STUDIO) | Bijapur
               </p>
-              <p style={{ ...sans }} className="text-base text-[#a0a09a] leading-relaxed font-light">
-                By capturing continuous cinema-grade shutter sequences, Rahul isolates genuine laughter, subtle glances, and the raw emotion of North Karnataka traditions.
-              </p>
+
+              <div className="relative pl-5 border-l-2 border-[#ffc800] py-1 bg-white/[0.02] rounded-r-lg">
+                <p style={{ ...serif }} className="text-lg text-[#f5f0e8] italic font-light leading-relaxed">
+                  &ldquo;Every picture should have a purpose and every frame should tell a story.&rdquo;
+                </p>
+              </div>
+
+              <div className="space-y-4 text-sm md:text-base text-[#bfbfb8] font-light leading-relaxed" style={{ ...sans }}>
+                <p>
+                  I am <strong className="text-white font-medium">Rahul R Chavan</strong>, founder and lead photographer at <strong className="text-white font-medium">Amma Mahadevi Photography Studio (AMP STUDIO) - Bijapur, Karnataka</strong>. With <strong className="text-[#ffc800] font-medium">8+ years of professional experience</strong> behind the lens, my journey has been driven by one simple belief — every picture should have a purpose and every frame should tell a story.
+                </p>
+                <p>
+                  Based in <strong className="text-white font-medium">Vijayapura (Bijapur)</strong>, I have had the privilege of mastering almost every genre of modern photography. What started as a solo passion has now become a studio trusted by hundreds of businesses and families across North Karnataka.
+                </p>
+                <p>
+                  Over these 8 years, I have built a wide and diverse client family including <span className="text-white">hospitals, hotels, restaurants, petrol pumps, real estate firms, furniture businesses, interior designers, fashion models, and wedding families.</span>
+                </p>
+              </div>
+
+              {/* Specializations Pills */}
+              <div className="pt-2">
+                <div style={{ ...mono }} className="text-[0.68rem] uppercase tracking-[0.2em] text-[#ffc800] mb-3 font-medium flex items-center gap-2">
+                  <span>Core Specializations</span>
+                  <div className="h-px flex-1 bg-white/10" />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                  {[
+                    "Candid Photography",
+                    "Wedding Photography",
+                    "Product Photography",
+                    "Commercial Photography",
+                    "Drone Photography & Videography",
+                    "Model & Portfolio Photoshoots",
+                    "Real Estate & Interior Photography",
+                    "Food & Hospitality Photography",
+                    "Cinematic Videography",
+                  ].map((item) => (
+                    <div
+                      key={item}
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 bg-[#121212] hover:border-[#ffc800]/50 transition-all duration-300"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#ffc800] flex-shrink-0" />
+                      <span style={{ ...sans }} className="text-xs text-white/90 font-light truncate">
+                        {item}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Philosophy Quote */}
+              <div className="p-4 rounded-xl border border-white/10 bg-[#111111] space-y-1.5">
+                <div style={{ ...mono }} className="text-[0.65rem] text-[#ffc800] tracking-[0.2em] uppercase font-medium">
+                  The AMP Philosophy
+                </div>
+                <p style={{ ...sans }} className="text-xs md:text-sm text-[#c8c8c0] leading-relaxed font-light">
+                  To me, photography is not just about the best camera or lighting. It is about understanding your need — whether it is a hospital that wants to look trustworthy, a hotel that wants to look luxurious, a furniture brand that wants to look premium, or a couple who wants to remember their wedding forever.
+                </p>
+              </div>
+
+              {/* Invitation */}
+              <div className="space-y-3">
+                <p style={{ ...sans }} className="text-xs md:text-sm text-[#bfbfb8] leading-relaxed font-light">
+                  If you are looking for the <strong className="text-white font-medium">best photographer in Bijapur, a professional photographer in Vijayapura, or an experienced commercial and wedding photographer near you</strong>, I, Rahul R Chavan, welcome you to AMP STUDIO. Let&apos;s create visuals that not only look beautiful but also work beautifully for you.
+                </p>
+                <div className="pt-2 border-t border-white/10">
+                  <div style={{ ...serif }} className="text-xl text-white font-normal italic">
+                    — Rahul R Chavan
+                  </div>
+                  <div style={{ ...mono }} className="text-[0.68rem] text-[#ffc800] tracking-[0.18em] uppercase mt-0.5">
+                    Founder, AMP STUDIO Bijapur
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
