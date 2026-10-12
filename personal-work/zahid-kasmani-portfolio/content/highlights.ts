@@ -1,0 +1,36 @@
+import type { Highlight } from './types';
+
+/** Shown on Achievements, grouped by lens, with no employer and no era. */
+export const highlights: Highlight[] = [
+  { id: 'sukuk', status: 'verify', lens: ['capital'],
+    text: { en: 'Structured a USD 200M sukuk that raised fund yield from under 4% to about 8% (fund size USD 90M).' }, callout: { en: 'Fund yield under 4% to about 8%' } },
+  { id: 'funding-cost', status: 'unattributed', lens: ['capital'],
+    text: { en: 'Reduced average funding cost by 163 basis points while extending loan tenures by 3 years.' }, callout: { en: '163 bps lower funding cost' } },
+  { id: 'secured-2-5b', status: 'unattributed', lens: ['capital'],
+    text: { en: 'Secured over USD 2.5B of funding for expansion and infrastructure projects.' }, callout: { en: 'USD 2.5B+ funding secured' } },
+  { id: 'ma-deals', status: 'unattributed', lens: ['capital'],
+    text: { en: 'Led due diligence and structuring of two major M&A deals, aligned with long-term shareholder value.' }, callout: { en: 'Two major M&A deals' } },
+  { id: 'alco', status: 'unattributed', lens: ['governance'],
+    text: { en: 'Chaired ALCO and sat on Board-level committees for Risk, Credit and Investments, Purchase, and GMC.' }, callout: { en: 'Chaired ALCO' } },
+  { id: 'cb-turnaround', status: 'unattributed', lens: ['governance', 'operations'],
+    text: { en: 'Reduced Central Bank approval turnaround for financials from over 2 weeks to 4 days through process redesign.' }, callout: { en: 'Central Bank turnaround to 4 days' } },
+  { id: 'six-systems', status: 'unattributed', lens: ['transformation'],
+    text: { en: 'Implemented six enterprise systems, including Oracle ERP, Yardi, and BI platforms.' }, callout: { en: 'Six enterprise systems' } },
+  { id: 'bi-dashboards', status: 'unattributed', lens: ['transformation'],
+    text: { en: 'Designed BI dashboards and MIS for the C-suite, improving reporting efficiency by 75%.' }, callout: { en: '75% reporting efficiency gain' } },
+  { id: 'data-frameworks', status: 'unattributed', lens: ['transformation'],
+    text: { en: 'Introduced data-driven decision-making frameworks that link finance, operations, and strategy.' }, callout: { en: 'Data-driven decision frameworks' } },
+  { id: 'ftp', status: 'unattributed', lens: ['transformation'],
+    text: { en: 'Revamped the funds transfer pricing model to match market dynamics.' }, callout: { en: 'Funds transfer pricing revamp' } },
+  { id: 'savings-500k', status: 'unattributed', lens: ['operations'],
+    text: { en: 'Achieved USD 500K+ annual cost savings through re-engineering of operations and finance processes.' }, callout: { en: 'USD 500K+ annual savings' } },
+  { id: 'consolidation', status: 'unattributed', lens: ['operations'],
+    text: { en: 'Consolidated multi-subsidiary operations for streamlined reporting and compliance.' }, callout: { en: 'Multi-subsidiary consolidation' } },
+  { id: 'profitability', status: 'unattributed', lens: ['operations'],
+    text: { en: 'Delivered profitability across subsidiaries through new business models, revenue diversification, and cost optimization.' }, callout: { en: 'Profitability across subsidiaries' } },
+  { id: 'strategic-plans', status: 'unattributed', lens: ['operations'],
+    text: { en: 'Partnered with Booz Allen and external consultants to design and execute 3- and 5-year strategic plans.' }, callout: { en: '3- and 5-year strategic plans' } },
+  { id: 'team-130', status: 'unattributed', lens: ['people'],
+    text: { en: 'Managed and developed teams of up to 130 professionals.' }, callout: { en: 'Teams of up to 130' } },
+];
+

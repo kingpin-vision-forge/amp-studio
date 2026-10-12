@@ -1,0 +1,67 @@
+import type { Role } from './types';
+
+export const roles: Role[] = [
+  {
+    id: 'central-circle', employer: 'Central Circle Company', title: 'CFO',
+    start: '2022-08', end: 'present', era: 'e4',
+    summary: { en: 'Leads finance, treasury, investments, and fundraising for group operations across multiple subsidiaries.' },
+    bullets: [
+      { id: 'cc-debt-platform', status: 'verify', lens: ['capital'],
+        text: { en: 'Pioneered a first-of-its-kind debt platform in the region, closing two transactions, including a USD 300M long-term funding line with unique terms for a specific business vertical.' },
+        callout: { en: 'First-of-its-kind debt platform' } },
+      { id: 'cc-core-system', status: 'confirmed', lens: ['transformation'],
+        text: { en: 'Upgraded the core system, including implementation of data-driven decision-making tools.' },
+        callout: { en: 'Core system upgrade' } },
+      { id: 'cc-transformation', status: 'confirmed', lens: ['transformation', 'governance'],
+        text: { en: 'Led finance transformation through enhanced systems, controls, and reporting.' },
+        callout: { en: 'Finance transformation' } },
+      { id: 'cc-savings', status: 'confirmed', lens: ['operations'],
+        text: { en: 'Process optimization and transformation initiatives generated recurring annual savings exceeding KWD 1M.' },
+        callout: { en: 'KWD 1M+ recurring savings' } },
+      { id: 'cc-low-margin', status: 'confirmed', lens: ['operations'],
+        text: { en: 'Reduced low-margin business verticals, optimizing absolute profitability and improving key ratios.' },
+        callout: { en: 'Profitability over volume' } },
+    ],
+  },
+  {
+    id: 'mabanee', employer: 'Mabanee Company (The Avenues), Kuwait, KSA, and Bahrain', title: 'CFO',
+    start: '2015-08', end: '2022-08', era: 'e3',
+    summary: { en: 'Led finance, group treasury, investments, and multibillion-dollar fundraising (debt, equity, and structured non-recourse project finance) for expansion projects across the region.' },
+    bullets: [
+      { id: 'mab-debt-portfolio', status: 'confirmed', lens: ['capital'],
+        text: { en: 'Managed a USD 5B debt portfolio.' }, callout: { en: 'USD 5B debt portfolio' } },
+      { id: 'mab-raised', status: 'confirmed', lens: ['capital'],
+        text: { en: 'Raised USD 1B in new funding.' }, callout: { en: 'USD 1B raised' } },
+      { id: 'mab-restructured', status: 'confirmed', lens: ['capital'],
+        text: { en: 'Restructured USD 1.5B to extend maturities and reduce cost of funding.' }, callout: { en: 'USD 1.5B restructured' } },
+      { id: 'mab-project-finance', status: 'confirmed', lens: ['capital'],
+        text: { en: 'Closed four large-scale project financings worth USD 2.75B.' }, callout: { en: 'USD 2.75B across four projects' } },
+      { id: 'mab-sar', status: 'verify', lens: ['capital'],
+        text: { en: 'Secured SAR 10B non-recourse project financing.' }, callout: { en: 'SAR 10B non-recourse' } },
+      { id: 'mab-systems', status: 'confirmed', lens: ['transformation'],
+        text: { en: 'Oversaw system upgrades, including Oracle ERP, Yardi, and BI platforms.' }, callout: { en: 'Oracle ERP, Yardi, BI' } },
+      { id: 'mab-subsidiaries', status: 'confirmed', lens: ['operations'],
+        text: { en: 'Managed and consolidated subsidiaries, including several international ones.' }, callout: { en: 'Subsidiary consolidation' } },
+      { id: 'mab-reporting', status: 'confirmed', lens: ['governance'],
+        text: { en: 'Prepared financial statements, MIS, and investor relations materials for a listed company, and supported market disclosures, analyst engagement, and Board communications.' },
+        callout: { en: 'Listed-company reporting' } },
+      { id: 'mab-stakeholders', status: 'confirmed', lens: ['governance'],
+        text: { en: 'Worked with Board committees, lenders, investors, regulators, and auditors.' }, callout: { en: 'Board and lender interface' } },
+    ],
+  },
+  {
+    id: 'kib', employer: 'Kuwait International Bank', title: 'AGM, Finance and Acting CFO',
+    start: '2011-04', end: '2014-07', era: 'e2', summary: null,
+    bullets: [
+      { id: 'kib-rating', status: 'confirmed', lens: ['governance', 'capital'],
+        text: { en: 'Negotiated a double credit rating upgrade (A- to A+).' }, callout: { en: 'A- to A+ upgrade' } },
+    ],
+  },
+  { id: 'alrajhi', employer: 'AlRajhi Bank, Kuwait', title: 'Finance Manager (CFO)', start: '2010-04', end: '2011-03', era: 'e5', summary: null, bullets: [] },
+  { id: 'altanmya', employer: 'AlTanmya International Investment Co.', title: 'Financial Controller (CFO)', start: '2008-11', end: '2010-04', era: 'e5', summary: null, bullets: [] },
+  { id: 'first-investment', employer: 'First Investment Company KSC, Kuwait', title: 'CFO', start: '2005-02', end: '2008-09', era: 'e1', summary: null, bullets: [] },
+  { id: 'gulf-bank', employer: 'Gulf Bank, Kuwait', title: 'Various Roles', start: '2001-06', end: '2005-01', era: 'e1',
+    summary: { en: 'Earlier roles available on request.' }, bullets: [] },
+];
+
+export const earlierFirms = ['BNP Paribas', 'Banque Saudi Fransi', 'AllianceBernstein', 'Citibank N.A.'];
